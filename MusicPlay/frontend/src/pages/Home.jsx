@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MusicCard } from '../components/MusicCard';
-import { usePlayer } from '../hooks/usePlayer';
+import MusicCard from '../components/MusicCard';
 
 // Mock data for different sections
 const trendingAlbums = [

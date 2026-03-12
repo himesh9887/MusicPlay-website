@@ -1,31 +1,27 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
-const AuthContext = createContext();
+const storedUser = (() => {
+  try {
+    const rawUser = localStorage.getItem('user_data');
+    return rawUser ? JSON.parse(rawUser) : null;
+  } catch {
+    return null;
+  }
+})();
+
+const hasStoredSession = Boolean(localStorage.getItem('auth_token') && storedUser);
+
+export const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(storedUser);
+  const [isAuthenticated, setIsAuthenticated] = useState(hasStoredSession);
+  const [loading] = useState(false);
 
-  // Check for existing auth token on mount
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    const savedUser = localStorage.getItem('user_data');
-    
-    if (token && savedUser) {
-      setUser(JSON.parse(savedUser));
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
-  }, []);
-
-  // Login function - simulates API call
-  const login = async (email, password) => {
+  const login = async (email, _password) => {
     try {
-      // Simulate API validation
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user data
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const mockUser = {
         id: '1',
         email,
@@ -42,25 +38,23 @@ export const AuthProvider = ({ children }) => {
         },
       };
 
-      const token = 'mock_jwt_token_' + Date.now();
-      
+      const token = `mock_jwt_token_${Date.now()}`;
+
       localStorage.setItem('auth_token', token);
       localStorage.setItem('user_data', JSON.stringify(mockUser));
-      
       setUser(mockUser);
       setIsAuthenticated(true);
-      
+
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Invalid credentials' };
     }
   };
 
-  // Register function
   const register = async (userData) => {
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const mockUser = {
         id: '1',
         email: userData.email,
@@ -77,21 +71,19 @@ export const AuthProvider = ({ children }) => {
         },
       };
 
-      const token = 'mock_jwt_token_' + Date.now();
-      
+      const token = `mock_jwt_token_${Date.now()}`;
+
       localStorage.setItem('auth_token', token);
       localStorage.setItem('user_data', JSON.stringify(mockUser));
-      
       setUser(mockUser);
       setIsAuthenticated(true);
-      
+
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Registration failed' };
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
@@ -99,42 +91,33 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
-  // Update user profile
   const updateProfile = async (updates) => {
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const updatedUser = { ...user, ...updates };
       localStorage.setItem('user_data', JSON.stringify(updatedUser));
       setUser(updatedUser);
-      
+
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Update failed' };
     }
   };
 
-  const value = {
-    user,
-    isAuthenticated,
-    loading,
-    login,
-    register,
-    logout,
-    updateProfile,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        loading,
+        login,
+        register,
+        logout,
+        updateProfile,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

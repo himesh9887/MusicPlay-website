@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SearchBar } from '../components/SearchBar';
-import { MusicCard } from '../components/MusicCard';
 import { Disc, Mic2, Music } from 'lucide-react';
+import SearchBar from '../components/SearchBar';
+import MusicCard from '../components/MusicCard';
 
-// Mock search data
 const mockArtists = [
   { id: '1', name: 'The Weeknd', image: 'https://images.unsplash.com/photo-1619983081563-430f63602796?w=200&h=200&fit=crop', genre: 'R&B' },
   { id: '2', name: 'Taylor Swift', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop', genre: 'Pop' },
@@ -44,12 +43,9 @@ const Search = () => {
   const query = searchParams.get('q') || '';
   const [activeTab, setActiveTab] = useState('all');
 
-  const hasResults = query && (mockTracks.length > 0 || mockArtists.length > 0 || mockAlbums.length > 0);
-
   return (
     <div className="min-h-screen bg-spotify-dark pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-6">Search</h1>
           <div className="max-w-2xl">
@@ -59,7 +55,6 @@ const Search = () => {
 
         {query ? (
           <>
-            {/* Search Results Tabs */}
             <div className="flex gap-4 mb-8 border-b border-spotify-light pb-4">
               {['all', 'songs', 'artists', 'albums'].map((tab) => (
                 <button
@@ -67,7 +62,7 @@ const Search = () => {
                   onClick={() => setActiveTab(tab)}
                   className={`capitalize font-medium transition-colors ${
                     activeTab === tab
-                      ? 'text-spotify-green border-b-2 border-spotify-green pb-4 -mb-4.5'
+                      ? 'text-spotify-green border-b-2 border-spotify-green pb-4 -mb-4'
                       : 'text-spotify-gray hover:text-white'
                   }`}
                 >
@@ -76,7 +71,6 @@ const Search = () => {
               ))}
             </div>
 
-            {/* Results */}
             {(activeTab === 'all' || activeTab === 'songs') && (
               <section className="mb-12">
                 <h2 className="text-xl font-bold text-white mb-4">Top Results</h2>
@@ -88,7 +82,6 @@ const Search = () => {
               </section>
             )}
 
-            {/* Artists */}
             {(activeTab === 'all' || activeTab === 'artists') && (
               <section className="mb-12">
                 <h2 className="text-xl font-bold text-white mb-4">Artists</h2>
@@ -120,7 +113,6 @@ const Search = () => {
               </section>
             )}
 
-            {/* Albums */}
             {(activeTab === 'all' || activeTab === 'albums') && (
               <section className="mb-12">
                 <h2 className="text-xl font-bold text-white mb-4">Albums</h2>
@@ -153,7 +145,6 @@ const Search = () => {
             )}
           </>
         ) : (
-          /* Browse All Categories */
           <div>
             <h2 className="text-2xl font-bold text-white mb-6">Browse all</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

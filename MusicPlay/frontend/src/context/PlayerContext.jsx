@@ -1,8 +1,5 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 
-const PlayerContext = createContext();
-
-// Mock music data
 const mockTracks = [
   {
     id: '1',
@@ -51,51 +48,16 @@ const mockTracks = [
   },
 ];
 
+export const PlayerContext = createContext(undefined);
+
 export const PlayerProvider = ({ children }) => {
+  const [playlist] = useState(mockTracks);
   const [currentTrack, setCurrentTrack] = useState(mockTracks[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.7);
-  const [playlist, setPlaylist] = useState(mockTracks);
   const [currentIndex, setCurrentIndex] = useState(0);
-  
-  const audioRef = useRef(null);
   const progressInterval = useRef(null);
-
-  // Simulate audio progress
-  useEffect(() => {
-    if (isPlaying) {
-      progressInterval.current = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= currentTrack.duration) {
-            handleNext();
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    } else {
-      clearInterval(progressInterval.current);
-    }
-
-    return () => clearInterval(progressInterval.current);
-  }, [isPlaying, currentTrack]);
-
-  const playTrack = (track) => {
-    if (currentTrack.id === track.id) {
-      setIsPlaying(!isPlaying);
-    } else {
-      setCurrentTrack(track);
-      setCurrentTime(0);
-      setIsPlaying(true);
-      const index = playlist.findIndex(t => t.id === track.id);
-      setCurrentIndex(index >= 0 ? index : 0);
-    }
-  };
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
 
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % playlist.length;
@@ -113,6 +75,46 @@ export const PlayerProvider = ({ children }) => {
     setIsPlaying(true);
   };
 
+  useEffect(() => {
+    if (!isPlaying) {
+      clearInterval(progressInterval.current);
+      return undefined;
+    }
+
+    progressInterval.current = setInterval(() => {
+      setCurrentTime((prev) => {
+        if (prev >= currentTrack.duration) {
+          const nextIndex = (currentIndex + 1) % playlist.length;
+          setCurrentIndex(nextIndex);
+          setCurrentTrack(playlist[nextIndex]);
+          return 0;
+        }
+
+        return prev + 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(progressInterval.current);
+  }, [currentIndex, currentTrack, isPlaying, playlist]);
+
+  const playTrack = (track) => {
+    if (currentTrack.id === track.id) {
+      setIsPlaying(!isPlaying);
+      return;
+    }
+
+    setCurrentTrack(track);
+    setCurrentTime(0);
+    setIsPlaying(true);
+
+    const index = playlist.findIndex((item) => item.id === track.id);
+    setCurrentIndex(index >= 0 ? index : 0);
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
   const seekTo = (time) => {
     setCurrentTime(Math.max(0, Math.min(time, currentTrack.duration)));
   };
@@ -123,32 +125,24 @@ export const PlayerProvider = ({ children }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const value = {
-    currentTrack,
-    isPlaying,
-    currentTime,
-    volume,
-    playlist,
-    playTrack,
-    togglePlay,
-    handleNext,
-    handlePrevious,
-    seekTo,
-    setVolume,
-    formatTime,
-  };
-
   return (
-    <PlayerContext.Provider value={value}>
+    <PlayerContext.Provider
+      value={{
+        currentTrack,
+        isPlaying,
+        currentTime,
+        volume,
+        playlist,
+        playTrack,
+        togglePlay,
+        handleNext,
+        handlePrevious,
+        seekTo,
+        setVolume,
+        formatTime,
+      }}
+    >
       {children}
     </PlayerContext.Provider>
   );
-};
-
-export const usePlayer = () => {
-  const context = useContext(PlayerContext);
-  if (context === undefined) {
-    throw new Error('usePlayer must be used within a PlayerProvider');
-  }
-  return context;
 };

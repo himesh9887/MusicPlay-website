@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Camera, MapPin, Music2, Heart, Link as LinkIcon, Twitter, Instagram, Edit2, Check, X } from 'lucide-react';
+import { Camera, MapPin, Music2, Link as LinkIcon, Twitter, Instagram, Edit2, Check, User } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const Profile = () => {

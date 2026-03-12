@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Heart, Clock, MoreHorizontal, Play } from 'lucide-react';
-import { PlaylistCard } from '../components/PlaylistCard';
+import { Plus, Heart, Play } from 'lucide-react';
+import PlaylistCard from '../components/PlaylistCard';
 
 const savedPlaylists = [
   {
@@ -46,9 +46,9 @@ const myPlaylists = [
 ];
 
 const recentlyPlayed = [
-  { id: '7', title: 'Daily Mix 1', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop' },
-  { id: '8', title: 'Discover Weekly', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop' },
-  { id: '9', title: 'Your Top Songs 2023', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=400&h=400&fit=crop' },
+  { id: '7', name: 'Daily Mix 1', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop' },
+  { id: '8', name: 'Discover Weekly', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop' },
+  { id: '9', name: 'Your Top Songs 2023', description: 'Made for you', cover: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=400&h=400&fit=crop' },
 ];
 
 const Library = () => {
@@ -58,7 +58,6 @@ const Library = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
@@ -69,7 +68,7 @@ const Library = () => {
               <p className="text-spotify-gray">3,247 liked songs • 24 playlists</p>
             </div>
           </div>
-          
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -80,7 +79,6 @@ const Library = () => {
           </motion.button>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-2 mb-8 overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => (
             <button
@@ -97,7 +95,6 @@ const Library = () => {
           ))}
         </div>
 
-        {/* Liked Songs Card */}
         <div className="mb-8">
           <motion.div
             whileHover={{ scale: 1.01 }}
@@ -124,7 +121,6 @@ const Library = () => {
           </motion.div>
         </div>
 
-        {/* Saved Playlists */}
         <section className="mb-12">
           <h3 className="text-xl font-bold text-white mb-4">Your Playlists</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -134,7 +130,6 @@ const Library = () => {
           </div>
         </section>
 
-        {/* Created Playlists */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-white">Created by You</h3>
@@ -149,12 +144,11 @@ const Library = () => {
           </div>
         </section>
 
-        {/* Recently Played */}
         <section>
           <h3 className="text-xl font-bold text-white mb-4">Recently Played</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {recentlyPlayed.map((item, index) => (
-              <PlaylistCard key={item.id} playlist={item} index={index} />
+            {recentlyPlayed.map((playlist, index) => (
+              <PlaylistCard key={playlist.id} playlist={playlist} index={index} />
             ))}
           </div>
         </section>
