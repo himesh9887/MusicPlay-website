@@ -76,18 +76,18 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light to-spotify-dark flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light to-spotify-dark flex items-center justify-center px-4 py-6 sm:py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white dark:bg-spotify-light rounded-2xl shadow-2xl p-8"
+        className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl dark:bg-spotify-light sm:p-8"
       >
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="mb-7 text-center sm:mb-8">
           <div className="w-12 h-12 bg-spotify-green rounded-full flex items-center justify-center mx-auto mb-4">
             <Music className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
             Sign up for free
           </h1>
           <p className="text-gray-500 dark:text-spotify-gray">

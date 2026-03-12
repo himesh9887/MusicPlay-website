@@ -36,7 +36,7 @@ const SearchBar = ({ className = '' }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder="What do you want to listen to?"
-          className="w-full pl-10 pr-10 py-2.5 bg-gray-100 dark:bg-spotify-light border-none rounded-full text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-spotify-green transition-all"
+          className="w-full pl-10 pr-10 py-3 md:py-2.5 bg-gray-100 dark:bg-spotify-light border-none rounded-full text-sm md:text-base text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-spotify-green transition-all"
         />
         <AnimatePresence>
           {query && (

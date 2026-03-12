@@ -57,7 +57,7 @@ const AuthenticatedLayout = ({ children }) => (
   <div className="min-h-screen bg-spotify-dark">
     <Navbar />
     <Sidebar />
-    <main className="lg:ml-64 pt-16">
+    <main className="pt-16 lg:ml-64">
       {children}
     </main>
     <MusicPlayer />

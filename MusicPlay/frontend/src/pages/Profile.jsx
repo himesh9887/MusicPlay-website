@@ -74,22 +74,22 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 lg:pb-32">
       {/* Profile Header */}
-      <div className="relative h-64 bg-gradient-to-b from-spotify-green/40 to-spotify-dark">
+      <div className="relative h-52 bg-gradient-to-b from-spotify-green/40 to-spotify-dark sm:h-64">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200')] bg-cover bg-center opacity-10" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
+      <div className="relative z-10 mx-auto -mt-20 max-w-4xl px-4 sm:-mt-32 sm:px-6 lg:px-8">
         {/* Avatar and Basic Info */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 mb-8">
+        <div className="mb-8 flex flex-col items-center gap-5 sm:flex-row sm:items-end sm:gap-6">
           <motion.div
             whileHover={isEditing ? { scale: 1.05 } : {}}
             className="relative"
           >
             <div 
               onClick={handleAvatarClick}
-              className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden shadow-2xl border-4 border-spotify-dark ${isEditing ? 'cursor-pointer' : ''}`}
+              className={`h-28 w-28 overflow-hidden rounded-full border-4 border-spotify-dark shadow-2xl sm:h-40 sm:w-40 ${isEditing ? 'cursor-pointer' : ''}`}
             >
               <img
                 src={formData.avatar || user?.avatar || 'https://via.placeholder.com/160'}
@@ -111,9 +111,9 @@ const Profile = () => {
             />
           </motion.div>
 
-          <div className="text-center sm:text-left flex-1">
-            <span className="text-sm font-bold uppercase tracking-wider text-white/80">Profile</span>
-            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-2">{user?.fullName}</h1>
+          <div className="flex-1 text-center sm:text-left">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/80 sm:text-sm">Profile</span>
+            <h1 className="mb-2 text-3xl font-bold text-white sm:text-6xl">{user?.fullName}</h1>
             <p className="text-spotify-gray">@{user?.username}</p>
           </div>
 
@@ -122,7 +122,7 @@ const Profile = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => isEditing ? handleSubmit({ preventDefault: () => {} }) : setIsEditing(true)}
             disabled={isLoading}
-            className="flex items-center gap-2 px-6 py-2 bg-white text-spotify-dark rounded-full font-bold hover:scale-105 transition-transform disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-spotify-dark transition-transform hover:scale-105 disabled:opacity-50 sm:w-auto sm:py-2"
           >
             {isEditing ? (
               <><Check className="w-4 h-4" /> Save</>
@@ -143,13 +143,13 @@ const Profile = () => {
         )}
 
         {/* Profile Form */}
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           {/* Basic Information */}
-          <section className="bg-white/5 rounded-2xl p-6 sm:p-8">
+          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <User className="w-5 h-5" /> Basic Information
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-spotify-gray mb-2">Username</label>
                 <input
@@ -215,11 +215,11 @@ const Profile = () => {
           </section>
 
           {/* Music Preferences */}
-          <section className="bg-white/5 rounded-2xl p-6 sm:p-8">
+          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <Music2 className="w-5 h-5" /> Music Preferences
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-spotify-gray mb-2">Favorite Genres</label>
                 <input
@@ -248,11 +248,11 @@ const Profile = () => {
           </section>
 
           {/* Social Links */}
-          <section className="bg-white/5 rounded-2xl p-6 sm:p-8">
+          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <LinkIcon className="w-5 h-5" /> Social Links
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-spotify-gray mb-2 flex items-center gap-2">
                   <Twitter className="w-4 h-4" /> Twitter
@@ -285,7 +285,7 @@ const Profile = () => {
           </section>
 
           {isEditing && (
-            <div className="flex gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -300,7 +300,7 @@ const Profile = () => {
                 whileTap={{ scale: 0.98 }}
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-8 py-3 border border-white/20 text-white rounded-full font-bold hover:bg-white/10 transition-all"
+                className="rounded-full border border-white/20 px-8 py-3 font-bold text-white transition-all hover:bg-white/10"
               >
                 Cancel
               </motion.button>
@@ -309,7 +309,7 @@ const Profile = () => {
         </form>
 
         {/* Stats Section */}
-        <section className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <section className="mt-10 grid grid-cols-2 gap-3 sm:mt-12 sm:grid-cols-4 sm:gap-4">
           {[
             { label: 'Followers', value: '1,247' },
             { label: 'Following', value: '843' },
@@ -321,9 +321,9 @@ const Profile = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white/5 rounded-xl p-6 text-center"
+              className="rounded-xl bg-white/5 p-4 text-center sm:p-6"
             >
-              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+              <div className="mb-1 text-xl font-bold text-white sm:text-2xl">{stat.value}</div>
               <div className="text-sm text-spotify-gray">{stat.label}</div>
             </motion.div>
           ))}

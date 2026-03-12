@@ -56,35 +56,35 @@ const Library = () => {
   const tabs = ['Playlists', 'Podcasts', 'Artists', 'Albums'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-              <Heart className="w-8 h-8 sm:w-10 sm:h-10 text-white fill-current" />
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 lg:pb-32">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg sm:h-20 sm:w-20">
+              <Heart className="h-8 w-8 fill-current text-white sm:h-10 sm:w-10" />
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-1">Your Library</h1>
-              <p className="text-spotify-gray">3,247 liked songs • 24 playlists</p>
+              <h1 className="mb-1 text-3xl font-bold text-white sm:text-4xl">Your Library</h1>
+              <p className="text-sm text-spotify-gray sm:text-base">3,247 liked songs • 24 playlists</p>
             </div>
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center gap-2 bg-spotify-green text-white px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-spotify-green px-6 py-3 font-bold text-white transition-all hover:brightness-110 sm:w-auto"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="h-5 w-5" />
             Create Playlist
           </motion.button>
         </div>
 
-        <div className="flex gap-2 mb-8 overflow-x-auto scrollbar-hide">
+        <div className="mb-8 flex gap-2 overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab.toLowerCase())}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all ${
                 activeTab === tab.toLowerCase()
                   ? 'bg-spotify-green text-white'
                   : 'bg-white/10 text-white hover:bg-white/20'
@@ -98,46 +98,48 @@ const Library = () => {
         <div className="mb-8">
           <motion.div
             whileHover={{ scale: 1.01 }}
-            className="relative overflow-hidden rounded-xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 sm:p-8 cursor-pointer group"
+            className="group relative cursor-pointer overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-5 sm:p-8"
           >
-            <div className="relative z-10">
-              <div className="flex items-end gap-4 mb-4">
-                <Heart className="w-8 h-8 text-white fill-current" />
-                <span className="text-white/80 text-sm font-medium">Playlist</span>
+            <div className="relative z-10 max-w-xl">
+              <div className="mb-4 flex items-end gap-3">
+                <Heart className="h-7 w-7 fill-current text-white sm:h-8 sm:w-8" />
+                <span className="text-xs font-medium uppercase tracking-[0.25em] text-white/80 sm:text-sm">
+                  Playlist
+                </span>
               </div>
-              <h2 className="text-3xl sm:text-5xl font-bold text-white mb-2">Liked Songs</h2>
-              <p className="text-white/80 mb-6">3,247 songs</p>
+              <h2 className="mb-2 text-3xl font-bold text-white sm:text-5xl">Liked Songs</h2>
+              <p className="mb-6 text-sm text-white/80 sm:text-base">3,247 songs</p>
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-14 h-14 bg-spotify-green rounded-full flex items-center justify-center shadow-lg hover:brightness-110 transition-all"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-spotify-green shadow-lg transition-all hover:brightness-110 sm:h-14 sm:w-14"
               >
-                <Play className="w-6 h-6 text-black fill-current ml-1" />
+                <Play className="ml-0.5 h-5 w-5 fill-current text-black sm:ml-1 sm:h-6 sm:w-6" />
               </motion.button>
             </div>
-            <div className="absolute right-0 bottom-0 opacity-20 transform translate-x-1/4 translate-y-1/4">
-              <Heart className="w-64 h-64 text-white fill-current" />
+            <div className="absolute bottom-0 right-0 hidden translate-x-1/4 translate-y-1/4 opacity-20 sm:block">
+              <Heart className="h-64 w-64 fill-current text-white" />
             </div>
           </motion.div>
         </div>
 
-        <section className="mb-12">
-          <h3 className="text-xl font-bold text-white mb-4">Your Playlists</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <section className="mb-10 md:mb-12">
+          <h3 className="mb-4 text-xl font-bold text-white">Your Playlists</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {savedPlaylists.map((playlist, index) => (
               <PlaylistCard key={playlist.id} playlist={playlist} index={index} />
             ))}
           </div>
         </section>
 
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-4">
+        <section className="mb-10 md:mb-12">
+          <div className="mb-4 flex items-center justify-between gap-4">
             <h3 className="text-xl font-bold text-white">Created by You</h3>
-            <button className="text-spotify-gray hover:text-white text-sm font-bold uppercase tracking-wider">
+            <button className="hidden text-sm font-bold uppercase tracking-wider text-spotify-gray hover:text-white sm:block">
               Show all
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {myPlaylists.map((playlist, index) => (
               <PlaylistCard key={playlist.id} playlist={playlist} index={index} />
             ))}
@@ -145,8 +147,8 @@ const Library = () => {
         </section>
 
         <section>
-          <h3 className="text-xl font-bold text-white mb-4">Recently Played</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <h3 className="mb-4 text-xl font-bold text-white">Recently Played</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {recentlyPlayed.map((playlist, index) => (
               <PlaylistCard key={playlist.id} playlist={playlist} index={index} />
             ))}

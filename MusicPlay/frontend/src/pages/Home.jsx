@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import MusicCard from '../components/MusicCard';
 
-// Mock data for different sections
 const trendingAlbums = [
   {
     id: '1',
@@ -14,13 +13,13 @@ const trendingAlbums = [
   {
     id: '2',
     title: 'Renaissance',
-    artist: 'Beyoncé',
+    artist: 'Beyonce',
     cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
     duration: 210,
   },
   {
     id: '3',
-    title: 'Harry\'s House',
+    title: "Harry's House",
     artist: 'Harry Styles',
     cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop',
     duration: 180,
@@ -108,29 +107,29 @@ const Home = () => {
   const filters = ['All', 'Music', 'Podcasts'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/50 to-spotify-dark pb-32">
-      {/* Hero Section */}
-      <div className="relative h-80 bg-gradient-to-b from-spotify-green/30 to-spotify-dark overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/50 to-spotify-dark pb-44 lg:pb-32">
+      <div className="relative max-h-[520px] min-h-[320px] overflow-hidden bg-gradient-to-b from-spotify-green/30 to-spotify-dark h-[54vh]">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200')] bg-cover bg-center opacity-20" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-8">
+        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-8 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
+            className="max-w-2xl"
           >
-            <span className="text-sm font-bold uppercase tracking-wider text-white/80 mb-2 block">
+            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.25em] text-white/80 sm:text-sm">
               Featured Playlist
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
+            <h1 className="mb-3 text-4xl font-bold text-white sm:text-5xl md:mb-4 md:text-7xl">
               Discover Weekly
             </h1>
-            <p className="text-lg text-white/80 mb-6 max-w-xl">
+            <p className="mb-5 max-w-xl text-sm text-white/80 sm:text-base md:mb-6 md:text-lg">
               Your weekly mixtape of fresh music. Enjoy new music and deep cuts picked for you.
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="btn-spotify text-lg px-8 py-3"
+              className="btn-spotify w-full text-base sm:w-auto sm:text-lg"
             >
               Play Now
             </motion.button>
@@ -138,16 +137,15 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filter Buttons */}
-        <div className="flex gap-3 mb-8 overflow-x-auto scrollbar-hide">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="mb-8 flex gap-2 overflow-x-auto scrollbar-hide sm:gap-3">
           {filters.map((filter) => (
             <motion.button
               key={filter}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => setActiveFilter(filter)}
-              className={`px-6 py-2 rounded-full font-medium transition-all whitespace-nowrap ${
+              className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all sm:px-6 ${
                 activeFilter === filter
                   ? 'bg-spotify-green text-white'
                   : 'bg-white/10 text-white hover:bg-white/20'
@@ -158,45 +156,42 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Trending Albums */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Trending Albums</h2>
-            <button className="text-spotify-gray hover:text-white text-sm font-bold uppercase tracking-wider transition-colors">
+        <section className="mb-10 md:mb-12">
+          <div className="mb-5 flex items-center justify-between gap-4 sm:mb-6">
+            <h2 className="text-xl font-bold text-white sm:text-2xl">Trending Albums</h2>
+            <button className="hidden text-sm font-bold uppercase tracking-wider text-spotify-gray transition-colors hover:text-white sm:block">
               Show all
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {trendingAlbums.map((album, index) => (
               <MusicCard key={album.id} track={album} index={index} />
             ))}
           </div>
         </section>
 
-        {/* Recommended Music */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Recommended for You</h2>
-            <button className="text-spotify-gray hover:text-white text-sm font-bold uppercase tracking-wider transition-colors">
+        <section className="mb-10 md:mb-12">
+          <div className="mb-5 flex items-center justify-between gap-4 sm:mb-6">
+            <h2 className="text-xl font-bold text-white sm:text-2xl">Recommended for You</h2>
+            <button className="hidden text-sm font-bold uppercase tracking-wider text-spotify-gray transition-colors hover:text-white sm:block">
               Show all
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {recommendedMusic.map((track, index) => (
               <MusicCard key={track.id} track={track} index={index} />
             ))}
           </div>
         </section>
 
-        {/* Recently Played */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Recently Played</h2>
-            <button className="text-spotify-gray hover:text-white text-sm font-bold uppercase tracking-wider transition-colors">
+          <div className="mb-5 flex items-center justify-between gap-4 sm:mb-6">
+            <h2 className="text-xl font-bold text-white sm:text-2xl">Recently Played</h2>
+            <button className="hidden text-sm font-bold uppercase tracking-wider text-spotify-gray transition-colors hover:text-white sm:block">
               Show all
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
             {recentlyPlayed.map((track, index) => (
               <MusicCard key={track.id} track={track} index={index} />
             ))}

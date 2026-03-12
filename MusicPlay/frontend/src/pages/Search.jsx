@@ -44,10 +44,10 @@ const Search = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   return (
-    <div className="min-h-screen bg-spotify-dark pb-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-spotify-dark pb-44 lg:pb-32">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-6">Search</h1>
+          <h1 className="mb-5 text-2xl font-bold text-white sm:mb-6 sm:text-3xl">Search</h1>
           <div className="max-w-2xl">
             <SearchBar />
           </div>
@@ -55,14 +55,14 @@ const Search = () => {
 
         {query ? (
           <>
-            <div className="flex gap-4 mb-8 border-b border-spotify-light pb-4">
+            <div className="mb-8 flex gap-3 overflow-x-auto border-b border-spotify-light pb-4 scrollbar-hide">
               {['all', 'songs', 'artists', 'albums'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`capitalize font-medium transition-colors ${
+                  className={`capitalize whitespace-nowrap font-medium transition-colors ${
                     activeTab === tab
-                      ? 'text-spotify-green border-b-2 border-spotify-green pb-4 -mb-4'
+                      ? 'border-b-2 border-spotify-green pb-4 -mb-4 text-spotify-green'
                       : 'text-spotify-gray hover:text-white'
                   }`}
                 >
@@ -72,9 +72,9 @@ const Search = () => {
             </div>
 
             {(activeTab === 'all' || activeTab === 'songs') && (
-              <section className="mb-12">
-                <h2 className="text-xl font-bold text-white mb-4">Top Results</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              <section className="mb-10 md:mb-12">
+                <h2 className="mb-4 text-lg font-bold text-white sm:text-xl">Top Results</h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
                   {mockTracks.slice(0, 5).map((track, index) => (
                     <MusicCard key={track.id} track={track} index={index} />
                   ))}
@@ -83,9 +83,9 @@ const Search = () => {
             )}
 
             {(activeTab === 'all' || activeTab === 'artists') && (
-              <section className="mb-12">
-                <h2 className="text-xl font-bold text-white mb-4">Artists</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6">
+              <section className="mb-10 md:mb-12">
+                <h2 className="mb-4 text-lg font-bold text-white sm:text-xl">Artists</h2>
+                <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 sm:gap-6 md:grid-cols-6">
                   {mockArtists.map((artist, index) => (
                     <motion.div
                       key={artist.id}
@@ -99,14 +99,14 @@ const Search = () => {
                         <img
                           src={artist.image}
                           alt={artist.name}
-                          className="w-full aspect-square object-cover rounded-full shadow-lg group-hover:shadow-xl transition-shadow"
+                          className="aspect-square w-full rounded-full object-cover shadow-lg transition-shadow group-hover:shadow-xl"
                         />
-                        <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Mic2 className="w-8 h-8 text-white" />
+                        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                          <Mic2 className="h-6 w-6 text-white sm:h-8 sm:w-8" />
                         </div>
                       </div>
-                      <h3 className="font-bold text-white mb-1">{artist.name}</h3>
-                      <p className="text-sm text-spotify-gray">{artist.genre}</p>
+                      <h3 className="mb-1 truncate text-sm font-bold text-white sm:text-base">{artist.name}</h3>
+                      <p className="text-xs text-spotify-gray sm:text-sm">{artist.genre}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -114,9 +114,9 @@ const Search = () => {
             )}
 
             {(activeTab === 'all' || activeTab === 'albums') && (
-              <section className="mb-12">
-                <h2 className="text-xl font-bold text-white mb-4">Albums</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              <section className="mb-10 md:mb-12">
+                <h2 className="mb-4 text-lg font-bold text-white sm:text-xl">Albums</h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
                   {mockAlbums.map((album, index) => (
                     <motion.div
                       key={album.id}
@@ -126,18 +126,18 @@ const Search = () => {
                       whileHover={{ y: -5 }}
                       className="group cursor-pointer"
                     >
-                      <div className="relative aspect-square mb-3 overflow-hidden rounded-lg shadow-lg">
+                      <div className="relative mb-3 aspect-square overflow-hidden rounded-xl shadow-lg">
                         <img
                           src={album.cover}
                           alt={album.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Disc className="w-10 h-10 text-white" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                          <Disc className="h-8 w-8 text-white sm:h-10 sm:w-10" />
                         </div>
                       </div>
-                      <h3 className="font-bold text-white truncate mb-1">{album.title}</h3>
-                      <p className="text-sm text-spotify-gray">{album.artist} • {album.year}</p>
+                      <h3 className="mb-1 truncate font-bold text-white">{album.title}</h3>
+                      <p className="text-xs text-spotify-gray sm:text-sm">{album.artist} • {album.year}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -146,19 +146,19 @@ const Search = () => {
           </>
         ) : (
           <div>
-            <h2 className="text-2xl font-bold text-white mb-6">Browse all</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <h2 className="mb-6 text-xl font-bold text-white sm:text-2xl">Browse all</h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
               {genres.map((genre, index) => (
                 <motion.div
                   key={genre.name}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  className={`relative h-40 rounded-lg overflow-hidden cursor-pointer bg-gradient-to-br ${genre.color} p-4`}
+                  whileHover={{ scale: 1.03 }}
+                  className={`relative h-32 cursor-pointer overflow-hidden rounded-2xl bg-gradient-to-br p-4 sm:h-40 ${genre.color}`}
                 >
-                  <h3 className="text-xl font-bold text-white">{genre.name}</h3>
-                  <Music className="absolute -bottom-2 -right-2 w-24 h-24 text-white/20 rotate-12" />
+                  <h3 className="text-lg font-bold text-white sm:text-xl">{genre.name}</h3>
+                  <Music className="absolute -bottom-2 -right-2 h-20 w-20 rotate-12 text-white/20 sm:h-24 sm:w-24" />
                 </motion.div>
               ))}
             </div>
