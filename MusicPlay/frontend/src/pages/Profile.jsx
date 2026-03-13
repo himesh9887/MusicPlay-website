@@ -74,7 +74,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 lg:pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-28 lg:pb-32">
       {/* Profile Header */}
       <div className="relative h-52 bg-gradient-to-b from-spotify-green/40 to-spotify-dark sm:h-64">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200')] bg-cover bg-center opacity-10" />

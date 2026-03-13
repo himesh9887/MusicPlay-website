@@ -53,79 +53,9 @@ const MusicPlayer = () => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] left-0 right-0 z-40 border-t border-gray-200 bg-white px-3 py-2 shadow-2xl dark:border-spotify-light dark:bg-spotify-dark lg:bottom-0 lg:left-64 lg:px-4 lg:py-3"
+      className="fixed bottom-0 left-0 right-0 z-40 hidden border-t border-gray-200 bg-white px-3 py-2 shadow-2xl dark:border-spotify-light dark:bg-spotify-dark lg:left-64 lg:block lg:px-4 lg:py-3"
     >
-      <div className="md:hidden space-y-3">
-        <div className="flex items-center gap-3">
-          <img
-            src={currentTrack.cover}
-            alt={currentTrack.title}
-            className="h-12 w-12 rounded-xl object-cover shadow-md"
-          />
-
-          <div className="min-w-0 flex-1">
-            <h4 className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-              {currentTrack.title}
-            </h4>
-            <p className="truncate text-xs text-gray-500 dark:text-spotify-gray">
-              {currentTrack.artist}
-            </p>
-          </div>
-
-          <button
-            onClick={() => setIsLiked((prev) => !prev)}
-            className={`transition-colors ${isLiked ? 'text-spotify-green' : 'text-gray-400'}`}
-          >
-            <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
-          </button>
-
-          <div className="flex items-center gap-1">
-            <button
-              onClick={handlePrevious}
-              className="rounded-full p-2 text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-white"
-            >
-              <SkipBack className="h-4 w-4 fill-current" />
-            </button>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={togglePlay}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-spotify-green text-black shadow-lg"
-            >
-              {isPlaying ? (
-                <Pause className="h-5 w-5 fill-current" />
-              ) : (
-                <Play className="ml-0.5 h-5 w-5 fill-current" />
-              )}
-            </motion.button>
-
-            <button
-              onClick={handleNext}
-              className="rounded-full p-2 text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-white"
-            >
-              <SkipForward className="h-4 w-4 fill-current" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 text-[11px] text-gray-400">
-          <span className="w-8 text-right">{formatTime(currentTime)}</span>
-          <div
-            className="group relative h-1.5 flex-1 cursor-pointer rounded-full bg-gray-300 dark:bg-spotify-lighter"
-            onClick={handleProgressClick}
-          >
-            <div
-              className="relative h-full rounded-full bg-spotify-green"
-              style={{ width: `${progressPercent}%` }}
-            >
-              <div className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-md" />
-            </div>
-          </div>
-          <span className="w-8">{formatTime(currentTrack.duration)}</span>
-        </div>
-      </div>
-
-      <div className="hidden max-w-screen-2xl items-center justify-between gap-4 md:flex">
+      <div className="max-w-screen-2xl items-center justify-between gap-4 md:flex">
         <div className="flex min-w-0 w-1/3 items-center gap-4">
           <img
             src={currentTrack.cover}

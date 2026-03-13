@@ -56,7 +56,7 @@ const Library = () => {
   const tabs = ['Playlists', 'Podcasts', 'Artists', 'Albums'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 lg:pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-28 lg:pb-32">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">

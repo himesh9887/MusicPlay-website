@@ -76,18 +76,18 @@ const Sidebar = () => {
       </motion.aside>
 
       <nav
-        className="lg:hidden fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/95 backdrop-blur-xl"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.5rem)' }}
+        className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 lg:hidden"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}
       >
-        <div className="grid grid-cols-3 gap-1 px-2 pt-2">
+        <div className="grid w-full max-w-xs grid-cols-3 gap-1 rounded-[28px] border border-white/10 bg-black/90 p-2 shadow-[0_24px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
           {menuItems.map((item) => (
             <NavLink
               key={item.label}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center rounded-2xl px-2 py-2.5 text-xs font-medium transition-colors ${
+                `flex flex-col items-center justify-center rounded-2xl px-2 py-2.5 text-[11px] font-medium transition-colors ${
                   isActive
-                    ? 'bg-spotify-light text-white'
+                    ? 'bg-spotify-green text-white shadow-lg shadow-spotify-green/20'
                     : 'text-spotify-gray hover:text-white'
                 }`
               }
