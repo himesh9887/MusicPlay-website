@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBar = ({ className = '' }) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const activeQuery = searchParams.get('q') || '';
+
+  useEffect(() => {
+    if (location.pathname === '/search') {
+      setQuery(activeQuery);
+      return;
+    }
+
+    setQuery('');
+  }, [activeQuery, location.pathname]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

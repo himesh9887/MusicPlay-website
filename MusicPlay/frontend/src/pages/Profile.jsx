@@ -74,7 +74,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-28 lg:pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 md:pb-40 lg:pb-32">
       {/* Profile Header */}
       <div className="relative h-52 bg-gradient-to-b from-spotify-green/40 to-spotify-dark sm:h-64">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200')] bg-cover bg-center opacity-10" />
@@ -145,7 +145,7 @@ const Profile = () => {
         {/* Profile Form */}
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           {/* Basic Information */}
-          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
+          <section className="rounded-[1.75rem] border border-white/8 bg-white/5 p-5 backdrop-blur-sm sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <User className="w-5 h-5" /> Basic Information
             </h2>
@@ -215,7 +215,7 @@ const Profile = () => {
           </section>
 
           {/* Music Preferences */}
-          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
+          <section className="rounded-[1.75rem] border border-white/8 bg-white/5 p-5 backdrop-blur-sm sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <Music2 className="w-5 h-5" /> Music Preferences
             </h2>
@@ -248,7 +248,7 @@ const Profile = () => {
           </section>
 
           {/* Social Links */}
-          <section className="rounded-2xl bg-white/5 p-5 sm:p-8">
+          <section className="rounded-[1.75rem] border border-white/8 bg-white/5 p-5 backdrop-blur-sm sm:p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <LinkIcon className="w-5 h-5" /> Social Links
             </h2>
@@ -328,7 +328,7 @@ const Profile = () => {
             </motion.div>
           ))}
         </section>
-      </div>
+      </div>         
     </div>
   );
 };

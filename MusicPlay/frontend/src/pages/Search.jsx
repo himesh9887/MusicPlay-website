@@ -44,7 +44,7 @@ const Search = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   return (
-    <div className="min-h-screen bg-spotify-dark pb-28 lg:pb-32">
+    <div className="min-h-screen bg-spotify-dark pb-44 md:pb-40 lg:pb-32">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-8">
           <h1 className="mb-5 text-2xl font-bold text-white sm:mb-6 sm:text-3xl">Search</h1>
@@ -55,20 +55,22 @@ const Search = () => {
 
         {query ? (
           <>
-            <div className="mb-8 flex gap-3 overflow-x-auto border-b border-spotify-light pb-4 scrollbar-hide">
-              {['all', 'songs', 'artists', 'albums'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`capitalize whitespace-nowrap font-medium transition-colors ${
-                    activeTab === tab
-                      ? 'border-b-2 border-spotify-green pb-4 -mb-4 text-spotify-green'
-                      : 'text-spotify-gray hover:text-white'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+            <div className="mb-8 overflow-x-auto pb-1 scrollbar-hide">
+              <div className="inline-flex gap-2 rounded-full border border-white/8 bg-white/4 p-1">
+                {['all', 'songs', 'artists', 'albums'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors ${
+                      activeTab === tab
+                        ? 'bg-spotify-green text-white'
+                        : 'text-spotify-gray hover:bg-white/6 hover:text-white'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {(activeTab === 'all' || activeTab === 'songs') && (
@@ -85,7 +87,7 @@ const Search = () => {
             {(activeTab === 'all' || activeTab === 'artists') && (
               <section className="mb-10 md:mb-12">
                 <h2 className="mb-4 text-lg font-bold text-white sm:text-xl">Artists</h2>
-                <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 sm:gap-6 md:grid-cols-6">
+                <div className="grid grid-cols-2 gap-4 min-[420px]:grid-cols-3 sm:grid-cols-4 sm:gap-6 md:grid-cols-6">
                   {mockArtists.map((artist, index) => (
                     <motion.div
                       key={artist.id}
@@ -93,7 +95,7 @@ const Search = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: index * 0.1 }}
                       whileHover={{ y: -5 }}
-                      className="text-center group cursor-pointer"
+                      className="group cursor-pointer text-center"
                     >
                       <div className="relative mb-3">
                         <img
@@ -105,7 +107,9 @@ const Search = () => {
                           <Mic2 className="h-6 w-6 text-white sm:h-8 sm:w-8" />
                         </div>
                       </div>
-                      <h3 className="mb-1 truncate text-sm font-bold text-white sm:text-base">{artist.name}</h3>
+                      <h3 className="mb-1 truncate text-sm font-bold text-white sm:text-base">
+                        {artist.name}
+                      </h3>
                       <p className="text-xs text-spotify-gray sm:text-sm">{artist.genre}</p>
                     </motion.div>
                   ))}
@@ -137,7 +141,9 @@ const Search = () => {
                         </div>
                       </div>
                       <h3 className="mb-1 truncate font-bold text-white">{album.title}</h3>
-                      <p className="text-xs text-spotify-gray sm:text-sm">{album.artist} • {album.year}</p>
+                      <p className="text-xs text-spotify-gray sm:text-sm">
+                        {album.artist} - {album.year}
+                      </p>
                     </motion.div>
                   ))}
                 </div>

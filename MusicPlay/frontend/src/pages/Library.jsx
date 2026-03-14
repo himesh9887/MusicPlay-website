@@ -28,19 +28,19 @@ const myPlaylists = [
   {
     id: '4',
     name: 'Workout Mix 2024',
-    description: 'By You • 45 songs',
+    description: 'By You - 45 songs',
     cover: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop',
   },
   {
     id: '5',
     name: 'Late Night Drive',
-    description: 'By You • 28 songs',
+    description: 'By You - 28 songs',
     cover: 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?w=400&h=400&fit=crop',
   },
   {
     id: '6',
     name: 'Focus Flow',
-    description: 'By You • 62 songs',
+    description: 'By You - 62 songs',
     cover: 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=400&h=400&fit=crop',
   },
 ];
@@ -56,7 +56,7 @@ const Library = () => {
   const tabs = ['Playlists', 'Podcasts', 'Artists', 'Albums'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-28 lg:pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-spotify-light/30 to-spotify-dark pb-44 md:pb-40 lg:pb-32">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">
@@ -65,7 +65,9 @@ const Library = () => {
             </div>
             <div>
               <h1 className="mb-1 text-3xl font-bold text-white sm:text-4xl">Your Library</h1>
-              <p className="text-sm text-spotify-gray sm:text-base">3,247 liked songs • 24 playlists</p>
+              <p className="text-sm text-spotify-gray sm:text-base">
+                3,247 liked songs - 24 playlists
+              </p>
             </div>
           </div>
 
@@ -79,20 +81,22 @@ const Library = () => {
           </motion.button>
         </div>
 
-        <div className="mb-8 flex gap-2 overflow-x-auto scrollbar-hide">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab.toLowerCase())}
-              className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all ${
-                activeTab === tab.toLowerCase()
-                  ? 'bg-spotify-green text-white'
-                  : 'bg-white/10 text-white hover:bg-white/20'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="mb-8 overflow-x-auto pb-1 scrollbar-hide">
+          <div className="inline-flex gap-2 rounded-full border border-white/8 bg-white/4 p-1">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab.toLowerCase())}
+                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                  activeTab === tab.toLowerCase()
+                    ? 'bg-spotify-green text-white'
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mb-8">

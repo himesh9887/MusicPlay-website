@@ -149,7 +149,7 @@ const recentlyPlayed = [
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.16),_transparent_34%),linear-gradient(180deg,_#151515_0%,_#0b0b0b_100%)] pb-28 lg:pb-32">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.16),_transparent_34%),linear-gradient(180deg,_#151515_0%,_#0b0b0b_100%)] pb-44 md:pb-40 lg:pb-32">
       <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
         <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(29,185,84,0.24),rgba(16,16,16,0.94)_48%,rgba(7,7,7,1))] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.32)] sm:p-7 lg:p-10">
           <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-400/20 blur-3xl" />
@@ -162,7 +162,7 @@ const Home = () => {
                 Built For Your Loop
               </div>
 
-              <h1 className="max-w-xl text-4xl font-semibold leading-none tracking-[-0.04em] text-white sm:text-5xl">
+              <h1 className="max-w-xl text-3xl font-semibold leading-none tracking-[-0.04em] text-white sm:text-5xl">
                 Home that actually feels good on phone.
               </h1>
 
@@ -212,7 +212,7 @@ const Home = () => {
                     alt={item.title}
                     className="absolute inset-y-0 right-0 h-full w-1/2 object-cover opacity-30"
                   />
-                  <div className="relative z-10 max-w-[60%]">
+                  <div className="relative z-10 max-w-[68%] sm:max-w-[60%]">
                     <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
                       <Clock3 className="h-3 w-3" />
                       Curated
@@ -226,7 +226,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mt-6 grid gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4">
           {quickLinks.map((item) => (
             <motion.button
               key={item.title}

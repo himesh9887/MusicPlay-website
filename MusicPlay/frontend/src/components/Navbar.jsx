@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -15,10 +15,17 @@ const navItems = [
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const closeMobileMenu = () => setIsMenuOpen(false);
+  const showMobileSearch = isAuthenticated && location.pathname !== '/search';
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+  }, [location.pathname, location.search]);
 
   const handleLogout = () => {
     logout();
@@ -28,9 +35,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 hidden border-b border-gray-200 bg-white/95 backdrop-blur-md dark:border-spotify-light dark:bg-spotify-dark/95 lg:block">
+    <nav className="sticky top-0 z-[70] border-b border-gray-200 bg-white/95 backdrop-blur-xl dark:border-spotify-light dark:bg-spotify-dark/95">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-3">
+        <div className="flex min-h-16 items-center justify-between gap-3 py-3 lg:h-16 lg:py-0">
           <Link to="/" className="flex min-w-0 items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-spotify-green shadow-lg shadow-spotify-green/20">
               <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -38,16 +45,16 @@ const Navbar = () => {
               </svg>
             </div>
             <div className="min-w-0">
-              <span className="hidden text-xl font-bold text-gray-900 dark:text-white sm:block">
+              <span className="block text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
                 Spotify
               </span>
-              <span className="block text-[11px] font-medium uppercase tracking-[0.2em] text-spotify-gray sm:hidden">
-                Music
+              <span className="block text-[10px] font-medium uppercase tracking-[0.22em] text-spotify-gray sm:hidden">
+                Music all day
               </span>
             </div>
           </Link>
 
-          <div className="hidden min-w-0 flex-1 md:flex md:max-w-md">
+          <div className="hidden min-w-0 flex-1 md:flex md:max-w-md lg:max-w-lg">
             <SearchBar />
           </div>
 
@@ -58,17 +65,22 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsProfileOpen((prev) => !prev)}
-                  className="flex items-center gap-2 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-spotify-light transition-colors"
+                  className="flex items-center gap-2 rounded-full p-1 transition-colors hover:bg-gray-100 dark:hover:bg-spotify-light"
                 >
                   <img
                     src={user?.avatar || 'https://via.placeholder.com/32'}
                     alt={user?.username}
-                    className="h-8 w-8 rounded-full object-cover"
+                    className="h-9 w-9 rounded-full object-cover ring-2 ring-white/60 dark:ring-white/10"
                   />
-                  <span className="hidden text-sm font-medium text-gray-700 dark:text-gray-200 sm:block">
-                    {user?.username}
-                  </span>
-                  <ChevronDown className="hidden h-4 w-4 text-gray-500 sm:block" />
+                  <div className="hidden min-w-0 text-left md:block">
+                    <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-100">
+                      {user?.fullName || user?.username}
+                    </p>
+                    <p className="truncate text-xs text-gray-500 dark:text-spotify-gray">
+                      @{user?.username}
+                    </p>
+                  </div>
+                  <ChevronDown className="hidden h-4 w-4 text-gray-500 md:block" />
                 </button>
 
                 <AnimatePresence>
@@ -77,19 +89,19 @@ const Navbar = () => {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-48 rounded-xl border border-gray-200 bg-white py-1 shadow-lg dark:border-spotify-lighter dark:bg-spotify-light"
+                      className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] rounded-2xl border border-gray-200 bg-white py-1.5 shadow-2xl dark:border-spotify-lighter dark:bg-spotify-light"
                     >
                       <Link
                         to="/profile"
                         onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-spotify-lighter"
+                        className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-spotify-lighter"
                       >
                         <User className="mr-2 h-4 w-4" />
                         Profile
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-spotify-lighter"
+                        className="flex w-full items-center px-4 py-2.5 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-spotify-lighter"
                       >
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
@@ -108,7 +120,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/login"
-                  className="rounded-full bg-white px-5 py-2 font-bold text-spotify-dark transition-transform hover:scale-105"
+                  className="rounded-full bg-spotify-green px-5 py-2 font-bold text-white transition-transform hover:scale-105"
                 >
                   Log in
                 </Link>
@@ -117,7 +129,7 @@ const Navbar = () => {
 
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="rounded-xl p-2 text-gray-700 transition-colors dark:text-gray-200 md:hidden"
+              className="rounded-2xl border border-gray-200/80 p-2 text-gray-700 transition-colors dark:border-white/10 dark:text-gray-200 lg:hidden"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -125,28 +137,36 @@ const Navbar = () => {
           </div>
         </div>
 
+        {showMobileSearch && (
+          <div className="pb-3 md:hidden">
+            <SearchBar />
+          </div>
+        )}
+
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-gray-200 pb-4 pt-3 dark:border-spotify-light md:hidden"
+              className="border-t border-gray-200 pb-4 pt-4 dark:border-spotify-light lg:hidden"
             >
               <div className="space-y-3">
-                <SearchBar />
-
                 {isAuthenticated && (
-                  <div className="rounded-2xl bg-gray-100/80 p-3 dark:bg-spotify-light/80">
+                  <div className="rounded-3xl bg-gray-100/80 p-3.5 dark:bg-spotify-light/80">
                     <div className="mb-3 flex items-center gap-3">
                       <img
                         src={user?.avatar || 'https://via.placeholder.com/40'}
                         alt={user?.username}
-                        className="h-10 w-10 rounded-full object-cover"
+                        className="h-11 w-11 rounded-full object-cover"
                       />
                       <div className="min-w-0">
-                        <p className="truncate font-semibold text-gray-900 dark:text-white">{user?.fullName || user?.username}</p>
-                        <p className="truncate text-sm text-gray-500 dark:text-spotify-gray">@{user?.username}</p>
+                        <p className="truncate font-semibold text-gray-900 dark:text-white">
+                          {user?.fullName || user?.username}
+                        </p>
+                        <p className="truncate text-sm text-gray-500 dark:text-spotify-gray">
+                          @{user?.username}
+                        </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Music, Check } from 'lucide-react';
+import { Eye, EyeOff, Music } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
@@ -76,11 +76,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-spotify-light to-spotify-dark flex items-center justify-center px-4 py-6 sm:py-12">
+    <div className="flex min-h-screen items-start justify-center bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.18),_transparent_28%),linear-gradient(180deg,_#222_0%,_#121212_100%)] px-4 py-6 sm:items-center sm:py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl dark:bg-spotify-light sm:p-8"
+        className="w-full max-w-md rounded-[2rem] border border-white/10 bg-white/95 p-5 shadow-[0_30px_80px_rgba(0,0,0,0.25)] backdrop-blur-xl dark:bg-spotify-light/95 sm:p-8"
       >
         {/* Header */}
         <div className="mb-7 text-center sm:mb-8">
