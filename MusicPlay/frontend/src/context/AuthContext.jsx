@@ -1,21 +1,46 @@
 import React, { createContext, useState } from 'react';
+import { demoUser } from '../data/musicData';
 
-const storedUser = (() => {
+const DEMO_OPT_OUT_KEY = 'musicplay_demo_opt_out';
+
+const getStoredSession = () => {
   try {
     const rawUser = localStorage.getItem('user_data');
-    return rawUser ? JSON.parse(rawUser) : null;
-  } catch {
-    return null;
-  }
-})();
+    const storedUser = rawUser ? JSON.parse(rawUser) : null;
+    const hasStoredSession = Boolean(localStorage.getItem('auth_token') && storedUser);
 
-const hasStoredSession = Boolean(localStorage.getItem('auth_token') && storedUser);
+    if (hasStoredSession) {
+      return {
+        user: storedUser,
+        isAuthenticated: true,
+      };
+    }
+
+    if (localStorage.getItem(DEMO_OPT_OUT_KEY) === '1') {
+      return {
+        user: null,
+        isAuthenticated: false,
+      };
+    }
+
+    return {
+      user: demoUser,
+      isAuthenticated: true,
+    };
+  } catch {
+    return {
+      user: demoUser,
+      isAuthenticated: true,
+    };
+  }
+};
 
 export const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(storedUser);
-  const [isAuthenticated, setIsAuthenticated] = useState(hasStoredSession);
+  const initialSession = getStoredSession();
+  const [user, setUser] = useState(initialSession.user);
+  const [isAuthenticated, setIsAuthenticated] = useState(initialSession.isAuthenticated);
   const [loading] = useState(false);
 
   const login = async (email, _password) => {
@@ -40,6 +65,7 @@ export const AuthProvider = ({ children }) => {
 
       const token = `mock_jwt_token_${Date.now()}`;
 
+      localStorage.removeItem(DEMO_OPT_OUT_KEY);
       localStorage.setItem('auth_token', token);
       localStorage.setItem('user_data', JSON.stringify(mockUser));
       setUser(mockUser);
@@ -73,6 +99,7 @@ export const AuthProvider = ({ children }) => {
 
       const token = `mock_jwt_token_${Date.now()}`;
 
+      localStorage.removeItem(DEMO_OPT_OUT_KEY);
       localStorage.setItem('auth_token', token);
       localStorage.setItem('user_data', JSON.stringify(mockUser));
       setUser(mockUser);
@@ -85,6 +112,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    localStorage.setItem(DEMO_OPT_OUT_KEY, '1');
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
     setUser(null);

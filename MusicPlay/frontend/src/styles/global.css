@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-spotify-green: #1db954;
-  --color-spotify-dark: #121212;
-  --color-spotify-darker: #080808;
+  --color-spotify-green: #19e35b;
+  --color-spotify-dark: #111111;
+  --color-spotify-darker: #090909;
   --color-spotify-light: #1f1f1f;
-  --color-spotify-lighter: #2a2a2a;
-  --color-spotify-gray: #b3b3b3;
+  --color-spotify-lighter: #292929;
+  --color-spotify-gray: #b2b2b2;
 }
 
 @layer base {
@@ -21,8 +21,8 @@
   body {
     margin: 0;
     min-width: 320px;
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    background: var(--color-spotify-dark);
+    font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #141414 0%, #090909 100%);
     color: #ffffff;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;

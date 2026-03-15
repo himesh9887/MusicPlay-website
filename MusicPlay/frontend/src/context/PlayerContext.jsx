@@ -1,58 +1,11 @@
 import React, { createContext, useEffect, useRef, useState } from 'react';
-
-const mockTracks = [
-  {
-    id: '1',
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    album: 'After Hours',
-    cover: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop',
-    duration: 200,
-    url: '#',
-  },
-  {
-    id: '2',
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    album: 'Future Nostalgia',
-    cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
-    duration: 203,
-    url: '#',
-  },
-  {
-    id: '3',
-    title: 'Stay',
-    artist: 'The Kid LAROI & Justin Bieber',
-    album: 'F*CK LOVE 3',
-    cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
-    duration: 141,
-    url: '#',
-  },
-  {
-    id: '4',
-    title: 'Good 4 U',
-    artist: 'Olivia Rodrigo',
-    album: 'SOUR',
-    cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop',
-    duration: 178,
-    url: '#',
-  },
-  {
-    id: '5',
-    title: 'Montero',
-    artist: 'Lil Nas X',
-    album: 'Montero',
-    cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop',
-    duration: 137,
-    url: '#',
-  },
-];
+import { playerTracks } from '../data/musicData';
 
 export const PlayerContext = createContext(undefined);
 
 export const PlayerProvider = ({ children }) => {
-  const [playlist] = useState(mockTracks);
-  const [currentTrack, setCurrentTrack] = useState(mockTracks[0]);
+  const [playlist] = useState(playerTracks);
+  const [currentTrack, setCurrentTrack] = useState(playerTracks[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.7);

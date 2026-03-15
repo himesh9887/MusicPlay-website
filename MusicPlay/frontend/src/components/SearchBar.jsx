@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBar = ({ className = '' }) => {
@@ -29,18 +29,21 @@ const SearchBar = ({ className = '' }) => {
 
   const clearSearch = () => {
     setQuery('');
+    if (location.pathname === '/search') {
+      navigate('/search');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className={`relative ${className}`}>
       <motion.div
         animate={{
-          scale: isFocused ? 1.02 : 1,
-          boxShadow: isFocused ? '0 4px 20px rgba(0,0,0,0.1)' : 'none',
+          scale: isFocused ? 1.01 : 1,
+          boxShadow: isFocused ? '0 16px 36px rgba(0,0,0,0.18)' : 'none',
         }}
-        className="relative"
+        className="relative overflow-hidden rounded-full border border-white/8 bg-[#242424]"
       >
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/45" />
         <input
           type="text"
           value={query}
@@ -48,7 +51,7 @@ const SearchBar = ({ className = '' }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder="What do you want to listen to?"
-          className="w-full pl-10 pr-10 py-3 md:py-2.5 bg-gray-100 dark:bg-spotify-light border-none rounded-full text-sm md:text-base text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-spotify-green transition-all"
+          className="w-full bg-transparent py-3 pl-12 pr-10 text-[0.96rem] text-white placeholder:text-white/42 focus:outline-none"
         />
         <AnimatePresence>
           {query && (
@@ -58,9 +61,9 @@ const SearchBar = ({ className = '' }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={clearSearch}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-spotify-lighter transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-white/8"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="h-4 w-4 text-white/55" />
             </motion.button>
           )}
         </AnimatePresence>

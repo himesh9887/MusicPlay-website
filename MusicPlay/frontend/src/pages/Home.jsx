@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock3, Flame, Headphones, Play, Radio, Sparkles } from 'lucide-react';
+import CoverArt from '../components/CoverArt';
 import MusicCard from '../components/MusicCard';
+import ShelfCard from '../components/ShelfCard';
+import {
+  homeFilters,
+  mobileQuickTiles,
+  popularStations,
+  recommendedStations,
+} from '../data/musicData';
+import { usePlayer } from '../hooks/usePlayer';
+
+const statusItems = ['Vo NR', '480 KB/s', '5G+', '52%'];
 
 const quickLinks = [
   {
@@ -116,7 +128,7 @@ const moodMixes = [
   },
 ];
 
-const recentlyPlayed = [
+const desktopRecents = [
   {
     id: '10',
     title: 'Blinding Lights',
@@ -147,173 +159,280 @@ const recentlyPlayed = [
   },
 ];
 
+const MobileQuickTile = ({ item, onSelect }) => (
+  <button
+    type="button"
+    onClick={() => onSelect?.(item.track || item)}
+    className={`flex w-full items-center gap-3 rounded-[1.1rem] bg-[#2a2a2a] p-2 text-left ${
+      item.id === 'quick-udit' ? 'col-span-1' : ''
+    }`}
+  >
+    <CoverArt art={item.art} title={item.title} className="h-[4.3rem] w-[4.3rem] shrink-0 rounded-[0.9rem]" />
+    <div className="min-w-0">
+      <p className="line-clamp-2 text-[0.95rem] font-semibold leading-tight tracking-[-0.03em] text-white">
+        {item.title}
+      </p>
+    </div>
+  </button>
+);
+
 const Home = () => {
+  const { playTrack } = usePlayer();
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  const mobileStations = activeFilter === 'Podcasts' ? popularStations : recommendedStations;
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.16),_transparent_34%),linear-gradient(180deg,_#151515_0%,_#0b0b0b_100%)] pb-44 md:pb-40 lg:pb-32">
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(29,185,84,0.24),rgba(16,16,16,0.94)_48%,rgba(7,7,7,1))] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.32)] sm:p-7 lg:p-10">
-          <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-400/20 blur-3xl" />
-          <div className="absolute -bottom-10 left-10 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
-
-          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
-            <div className="max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
-                <Sparkles className="h-3.5 w-3.5 text-spotify-green" />
-                Built For Your Loop
-              </div>
-
-              <h1 className="max-w-xl text-3xl font-semibold leading-none tracking-[-0.04em] text-white sm:text-5xl">
-                Home that actually feels good on phone.
-              </h1>
-
-              <p className="mt-4 max-w-lg text-sm leading-6 text-white/72 sm:text-base">
-                Tight layout, faster scanning, stronger cards, and one clear floating dock at the bottom. No extra mobile chrome.
-              </p>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <button className="inline-flex items-center justify-center gap-2 rounded-full bg-spotify-green px-5 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
-                  <Play className="ml-0.5 h-4 w-4 fill-current" />
-                  Play Your Mix
-                </button>
-                <button className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white/88">
-                  Explore Fresh Picks
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-
-              <div className="mt-7 grid grid-cols-3 gap-2 sm:max-w-md sm:gap-3">
-                {[
-                  { label: 'Saved', value: '184' },
-                  { label: 'New Today', value: '12' },
-                  { label: 'Minutes', value: '86' },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-2xl border border-white/8 bg-black/20 px-3 py-3"
-                  >
-                    <div className="text-xl font-semibold text-white sm:text-2xl">{item.value}</div>
-                    <div className="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/55">
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {spotlightCards.map((item) => (
-                <motion.article
-                  key={item.id}
-                  whileHover={{ y: -4 }}
-                  className={`relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-gradient-to-br ${item.tone} p-4`}
-                >
-                  <img
-                    src={item.cover}
-                    alt={item.title}
-                    className="absolute inset-y-0 right-0 h-full w-1/2 object-cover opacity-30"
-                  />
-                  <div className="relative z-10 max-w-[68%] sm:max-w-[60%]">
-                    <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
-                      <Clock3 className="h-3 w-3" />
-                      Curated
-                    </div>
-                    <h2 className="text-lg font-semibold text-white">{item.title}</h2>
-                    <p className="mt-2 text-xs leading-5 text-white/70 sm:text-sm">{item.subtitle}</p>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-6 grid gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4">
-          {quickLinks.map((item) => (
-            <motion.button
-              key={item.title}
-              whileHover={{ y: -3 }}
-              whileTap={{ scale: 0.98 }}
-              className={`rounded-[1.5rem] border border-white/7 bg-gradient-to-br ${item.accent} from-0% to-100% p-[1px] text-left`}
-            >
-              <div className="h-full rounded-[calc(1.5rem-1px)] bg-black/70 px-4 py-4">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8">
-                  <item.icon className="h-5 w-5 text-white" />
-                </div>
-                <h3 className="text-base font-semibold text-white">{item.title}</h3>
-                <p className="mt-1 text-sm leading-5 text-white/62">{item.subtitle}</p>
-              </div>
-            </motion.button>
-          ))}
-        </section>
-
-        <section className="mt-9">
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Trending</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Albums moving right now</h2>
-            </div>
-            <button className="hidden text-sm font-semibold text-white/58 lg:block">Show all</button>
-          </div>
-
-          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:overflow-visible">
-            {trendingAlbums.map((album, index) => (
-              <div key={album.id} className="min-w-[160px] snap-start sm:min-w-[190px] lg:min-w-0">
-                <MusicCard track={album} index={index} />
-              </div>
+    <>
+      <div className="min-h-screen px-4 pb-44 pt-5 md:hidden">
+        <div className="mb-5 flex items-center justify-between text-sm font-semibold text-white">
+          <span className="text-[1.82rem] tracking-[-0.05em]">8:44</span>
+          <div className="flex items-center gap-2 text-[0.72rem] text-white/78">
+            {statusItems.map((item) => (
+              <span key={item}>{item}</span>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section className="mt-10 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-          <motion.div
-            whileHover={{ y: -4 }}
-            className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-5"
+        <div className="mb-6 flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
+          <Link
+            to="/profile"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#ff612d] text-[1.9rem] font-black text-black"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(29,185,84,0.22),transparent_35%)]" />
-            <div className="relative z-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Mood Capsule</p>
-              <h2 className="mt-2 max-w-sm text-2xl font-semibold tracking-[-0.03em] text-white">
-                A cleaner mobile home means faster choices and less hunting.
-              </h2>
-              <p className="mt-3 max-w-md text-sm leading-6 text-white/66">
-                Featured rows now scroll naturally on phone, cards breathe better, and the hero gives you immediate entry points.
-              </p>
+            H
+          </Link>
 
-              <div className="mt-6 flex flex-wrap gap-2">
-                {['Deep focus', 'Clean vocals', 'Low-key pop', 'Smooth night'].map((chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-xs font-medium text-white/78"
-                  >
-                    {chip}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+          {homeFilters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setActiveFilter(filter)}
+              className={`shrink-0 rounded-full px-7 py-3 text-[1.05rem] font-medium transition-colors ${
+                activeFilter === filter
+                  ? 'bg-[#19e35b] text-black'
+                  : 'bg-[#2b2b2b] text-white/88'
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            {moodMixes.map((track, index) => (
-              <MusicCard key={track.id} track={track} index={index} />
+        <section>
+          <div className="grid grid-cols-2 gap-3">
+            {mobileQuickTiles.map((item) => (
+              <MobileQuickTile
+                key={item.id}
+                item={item}
+                onSelect={item.track ? playTrack : undefined}
+              />
             ))}
           </div>
         </section>
 
-        <section className="mt-10">
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Recents</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Back in your rotation</h2>
-            </div>
-          </div>
+        <section className="mt-12">
+          <h1 className="mb-5 text-[2rem] font-semibold tracking-[-0.06em] text-white">
+            Recommended Stations
+          </h1>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {recentlyPlayed.map((track, index) => (
-              <MusicCard key={track.id} track={track} index={index} />
+          <div className="flex gap-4 overflow-x-auto pb-1 scrollbar-hide">
+            {mobileStations.map((item, index) => (
+              <ShelfCard
+                key={item.id}
+                item={item}
+                index={index}
+                className="min-w-[18rem]"
+                artworkClassName="aspect-square"
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="mb-5 text-[2rem] font-semibold tracking-[-0.06em] text-white">
+            Popular radio
+          </h2>
+
+          <div className="flex gap-4 overflow-x-auto pb-1 scrollbar-hide">
+            {popularStations.map((item, index) => (
+              <ShelfCard
+                key={item.id}
+                item={item}
+                index={index}
+                className="min-w-[18rem]"
+                artworkClassName="aspect-square"
+              />
             ))}
           </div>
         </section>
       </div>
-    </div>
+
+      <div className="hidden min-h-screen bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.16),_transparent_34%),linear-gradient(180deg,_#151515_0%,_#0b0b0b_100%)] pb-40 md:block lg:pb-32">
+        <div className="w-full px-4 py-5 sm:px-6 lg:px-5 xl:px-8 lg:py-8">
+          <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(29,185,84,0.24),rgba(16,16,16,0.94)_48%,rgba(7,7,7,1))] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.32)] sm:p-7 lg:p-8 xl:p-10">
+            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-400/20 blur-3xl" />
+            <div className="absolute -bottom-10 left-10 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
+
+            <div className="relative z-10 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_20rem] xl:grid-cols-[minmax(0,1.3fr)_24rem] lg:items-end">
+              <div className="max-w-2xl">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
+                  <Sparkles className="h-3.5 w-3.5 text-spotify-green" />
+                  Built For Your Loop
+                </div>
+
+                <h1 className="max-w-xl text-3xl font-semibold leading-none tracking-[-0.04em] text-white sm:text-5xl">
+                  Home that actually feels good on tablet and desktop.
+                </h1>
+
+                <p className="mt-4 max-w-lg text-sm leading-6 text-white/72 sm:text-base">
+                  Bigger hero, stronger discovery rows, and cleaner browsing when you have more space.
+                </p>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <button className="inline-flex items-center justify-center gap-2 rounded-full bg-spotify-green px-5 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
+                    <Play className="ml-0.5 h-4 w-4 fill-current" />
+                    Play Your Mix
+                  </button>
+                  <button className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white/88">
+                    Explore Fresh Picks
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="mt-7 grid grid-cols-3 gap-2 sm:max-w-md sm:gap-3">
+                  {[
+                    { label: 'Saved', value: '184' },
+                    { label: 'New Today', value: '12' },
+                    { label: 'Minutes', value: '86' },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-2xl border border-white/8 bg-black/20 px-3 py-3"
+                    >
+                      <div className="text-xl font-semibold text-white sm:text-2xl">{item.value}</div>
+                      <div className="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/55">
+                        {item.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                {spotlightCards.map((item) => (
+                  <motion.article
+                    key={item.id}
+                    whileHover={{ y: -4 }}
+                    className={`relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-gradient-to-br ${item.tone} p-4`}
+                  >
+                    <img
+                      src={item.cover}
+                      alt={item.title}
+                      className="absolute inset-y-0 right-0 h-full w-1/2 object-cover opacity-30"
+                    />
+                    <div className="relative z-10 max-w-[68%] sm:max-w-[60%]">
+                      <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
+                        <Clock3 className="h-3 w-3" />
+                        Curated
+                      </div>
+                      <h2 className="text-lg font-semibold text-white">{item.title}</h2>
+                      <p className="mt-2 text-xs leading-5 text-white/70 sm:text-sm">{item.subtitle}</p>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-6 grid gap-3 min-[420px]:grid-cols-2 xl:grid-cols-4">
+            {quickLinks.map((item) => (
+              <motion.button
+                key={item.title}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
+                className={`rounded-[1.5rem] border border-white/7 bg-gradient-to-br ${item.accent} from-0% to-100% p-[1px] text-left`}
+              >
+                <div className="h-full rounded-[calc(1.5rem-1px)] bg-black/70 px-4 py-4">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8">
+                    <item.icon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-white">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-5 text-white/62">{item.subtitle}</p>
+                </div>
+              </motion.button>
+            ))}
+          </section>
+
+          <section className="mt-9">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Trending</p>
+                <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Albums moving right now</h2>
+              </div>
+              <button className="hidden text-sm font-semibold text-white/58 lg:block">Show all</button>
+            </div>
+
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory xl:grid xl:grid-cols-5 xl:overflow-visible">
+              {trendingAlbums.map((album, index) => (
+                <div key={album.id} className="min-w-[160px] snap-start sm:min-w-[190px] lg:min-w-0">
+                  <MusicCard track={album} index={index} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-10 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+            <motion.div
+              whileHover={{ y: -4 }}
+              className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-5"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(29,185,84,0.22),transparent_35%)]" />
+              <div className="relative z-10">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Mood Capsule</p>
+                <h2 className="mt-2 max-w-sm text-2xl font-semibold tracking-[-0.03em] text-white">
+                  A cleaner large-screen home means faster choices and less hunting.
+                </h2>
+                <p className="mt-3 max-w-md text-sm leading-6 text-white/66">
+                  Featured rows breathe more on larger screens, while the mobile view stays close to the phone screenshot you shared.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {['Deep focus', 'Clean vocals', 'Low-key pop', 'Smooth night'].map((chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-xs font-medium text-white/78"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {moodMixes.map((track, index) => (
+                <MusicCard key={track.id} track={track} index={index} />
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-10">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Recents</p>
+                <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Back in your rotation</h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+              {desktopRecents.map((track, index) => (
+                <MusicCard key={track.id} track={track} index={index} />
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </>
   );
 };
 
