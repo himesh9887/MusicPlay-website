@@ -56,11 +56,11 @@ const PublicRoute = ({ children }) => {
 
 // Layout Component for authenticated pages
 const AuthenticatedLayout = ({ children }) => (
-  <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(244,162,97,0.2),_transparent_24%),linear-gradient(180deg,_#141414_0%,_#090909_100%)] text-white">
-    <div className="hidden md:block lg:ml-72">
+  <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(244,162,97,0.2),_transparent_24%),linear-gradient(180deg,_#141414_0%,_#090909_100%)] text-white lg:pl-72">
+    <div className="hidden md:block">
       <Navbar />
     </div>
-    <main className="mx-auto min-h-screen w-full max-w-[27rem] bg-[#111111] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_32px_120px_rgba(0,0,0,0.45)] md:mx-0 md:max-w-none md:bg-transparent md:shadow-none lg:ml-72">
+    <main className="mx-auto min-h-screen w-full max-w-[27rem] overflow-x-hidden bg-[#111111] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_32px_120px_rgba(0,0,0,0.45)] md:mx-0 md:max-w-none md:bg-transparent md:shadow-none">
       {children}
     </main>
     <MusicPlayer />

@@ -54,7 +54,7 @@ const Navbar = () => {
             </div>
           </Link>
 
-          <div className="hidden min-w-0 flex-1 md:flex md:max-w-md lg:max-w-[34rem] lg:flex-none">
+          <div className="hidden min-w-0 flex-1 md:flex md:max-w-md lg:max-w-[36rem] xl:max-w-[40rem] lg:flex-none">
             <SearchBar />
           </div>
 

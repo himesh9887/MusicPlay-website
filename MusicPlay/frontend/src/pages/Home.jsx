@@ -1,163 +1,92 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowRight, Clock3, Flame, Headphones, Play, Radio, Sparkles } from 'lucide-react';
+import { ArrowRight, Clock3, Disc3, Headphones, Play, Radio, Sparkles } from 'lucide-react';
 import CoverArt from '../components/CoverArt';
-import MusicCard from '../components/MusicCard';
 import ShelfCard from '../components/ShelfCard';
 import {
+  homeAlbums,
   homeFilters,
   mobileQuickTiles,
+  playerTracks,
   popularStations,
+  radioShelf,
+  recentListening,
   recommendedStations,
 } from '../data/musicData';
+import { useAuth } from '../hooks/useAuth';
 import { usePlayer } from '../hooks/usePlayer';
 
 const statusItems = ['Vo NR', '480 KB/s', '5G+', '52%'];
+const desktopHeroChips = ['All', 'Music', 'Radio', 'Bollywood 90s'];
 
-const quickLinks = [
+const formatDuration = (duration) =>
+  `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`;
+
+const desktopQuickTiles = [
   {
-    title: 'Morning Reset',
-    subtitle: 'Soft pop and clean vocals',
-    icon: Sparkles,
-    accent: 'from-emerald-400/30 to-cyan-400/10',
+    id: 'desk-main-ishq',
+    title: 'Main Ishq Uska Radio',
+    subtitle: 'Alka Yagnik, Javed Ali',
+    art: playerTracks[1].art,
+    track: playerTracks[1],
   },
   {
-    title: 'Power Hour',
-    subtitle: 'High-energy tracks for movement',
-    icon: Flame,
-    accent: 'from-orange-400/30 to-rose-500/10',
+    id: 'desk-liked',
+    title: 'Liked Songs',
+    subtitle: '247 saved tracks',
+    art: {
+      ...radioShelf[1].art,
+      displayTitle: 'LIKED\nSONGS',
+      footer: '247 TRACKS',
+    },
   },
   {
-    title: 'Focus Grid',
-    subtitle: 'Instrumentals for deep work',
-    icon: Headphones,
-    accent: 'from-sky-400/30 to-indigo-500/10',
+    id: 'desk-koyla',
+    title: homeAlbums[1].title,
+    subtitle: homeAlbums[1].subtitle,
+    art: homeAlbums[1].art,
   },
   {
-    title: 'Radio Drift',
-    subtitle: 'Fresh discoveries and hidden gems',
-    icon: Radio,
-    accent: 'from-fuchsia-400/30 to-violet-500/10',
+    id: 'desk-all-out',
+    title: playerTracks[3].title,
+    subtitle: playerTracks[3].artist,
+    art: playerTracks[3].art,
+    track: playerTracks[3],
+  },
+  {
+    id: 'desk-two-good',
+    title: radioShelf[1].title,
+    subtitle: radioShelf[1].subtitle,
+    art: radioShelf[1].art,
+  },
+  {
+    id: 'desk-tip-tip',
+    title: playerTracks[4].title,
+    subtitle: playerTracks[4].artist,
+    art: playerTracks[4].art,
+    track: playerTracks[4],
   },
 ];
 
-const spotlightCards = [
+const desktopForYou = [
   {
-    id: 's1',
-    title: 'Night Drive Archive',
-    subtitle: 'Neon pop, velvet synths, zero skips.',
-    cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=600&fit=crop',
-    tone: 'from-slate-900 via-slate-800 to-emerald-900',
+    id: 'for-you-rain',
+    title: 'Rain Window',
+    subtitle: 'Soft duets, wet streets, and slow hooks.',
+    art: playerTracks[4].art,
+    track: playerTracks[4],
+    badge: 'Made for you',
   },
   {
-    id: 's2',
-    title: 'Fresh Finds',
-    subtitle: 'New drops picked around your loop.',
-    cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=600&fit=crop',
-    tone: 'from-zinc-900 via-zinc-800 to-orange-900',
-  },
-];
-
-const trendingAlbums = [
-  {
-    id: '1',
-    title: 'Midnights',
-    artist: 'Taylor Swift',
-    cover: 'https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop',
-    duration: 240,
-  },
-  {
-    id: '2',
-    title: 'Renaissance',
-    artist: 'Beyonce',
-    cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
-    duration: 210,
-  },
-  {
-    id: '3',
-    title: "Harry's House",
-    artist: 'Harry Styles',
-    cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop',
-    duration: 180,
-  },
-  {
-    id: '4',
-    title: 'Special',
-    artist: 'Lizzo',
-    cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
-    duration: 195,
-  },
-  {
-    id: '5',
-    title: 'Un Verano Sin Ti',
-    artist: 'Bad Bunny',
-    cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop',
-    duration: 225,
+    id: 'for-you-soft',
+    title: 'Soft Kumar Sanu',
+    subtitle: 'Warm vocals and no-skips nostalgia.',
+    art: homeAlbums[2].art,
+    badge: 'Picked tonight',
   },
 ];
 
-const moodMixes = [
-  {
-    id: '6',
-    title: 'Afterglow Mix',
-    artist: 'Dream pop, indie, alt-r&b',
-    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&h=300&fit=crop',
-    duration: 167,
-  },
-  {
-    id: '7',
-    title: 'Silver Traffic',
-    artist: 'Late-night city pulse',
-    cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=300&fit=crop',
-    duration: 141,
-  },
-  {
-    id: '8',
-    title: 'Velvet Bounce',
-    artist: 'Warm bass and smooth hooks',
-    cover: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=300&h=300&fit=crop',
-    duration: 200,
-  },
-  {
-    id: '9',
-    title: 'Cloud Atlas',
-    artist: 'Airy layers for long sessions',
-    cover: 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?w=300&h=300&fit=crop',
-    duration: 192,
-  },
-];
-
-const desktopRecents = [
-  {
-    id: '10',
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    cover: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop',
-    duration: 200,
-  },
-  {
-    id: '11',
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
-    duration: 203,
-  },
-  {
-    id: '12',
-    title: 'Good 4 U',
-    artist: 'Olivia Rodrigo',
-    cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop',
-    duration: 178,
-  },
-  {
-    id: '13',
-    title: 'Montero',
-    artist: 'Lil Nas X',
-    cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop',
-    duration: 137,
-  },
-];
+const desktopPopular = [...recommendedStations, ...popularStations];
 
 const MobileQuickTile = ({ item, onSelect }) => (
   <button
@@ -176,11 +105,157 @@ const MobileQuickTile = ({ item, onSelect }) => (
   </button>
 );
 
+const DesktopQuickTile = ({ item, onSelect }) => (
+  <button
+    type="button"
+    onClick={() => onSelect?.(item.track || item)}
+    className="group flex items-center gap-3 rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] px-3 py-3 text-left transition-all hover:border-white/14 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.11),rgba(255,255,255,0.05))] hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
+  >
+    <CoverArt art={item.art} title={item.title} className="h-[4.8rem] w-[4.8rem] shrink-0 rounded-[1rem]" />
+    <div className="min-w-0">
+      <p className="line-clamp-2 text-[1rem] font-semibold leading-tight tracking-[-0.03em] text-white">
+        {item.title}
+      </p>
+      <p className="mt-1 line-clamp-2 text-sm text-white/54">{item.subtitle}</p>
+    </div>
+    <div className="ml-auto hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black/18 text-white/44 transition-colors group-hover:bg-spotify-green group-hover:text-black xl:flex">
+      <Play className="h-4 w-4 fill-current" />
+    </div>
+  </button>
+);
+
+const DesktopFeatureCard = ({ item, onSelect }) => (
+  <button
+    type="button"
+    onClick={() => onSelect?.(item.track || item)}
+    className="group rounded-[1.65rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-4 text-left transition-all hover:-translate-y-0.5 hover:border-white/14 hover:shadow-[0_22px_45px_rgba(0,0,0,0.24)]"
+  >
+    <div className="mb-4 overflow-hidden rounded-[1.2rem]">
+      <CoverArt art={item.art} title={item.title} className="aspect-[1.2/1] w-full rounded-[1.2rem]" />
+    </div>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">{item.badge}</p>
+    <h3 className="mt-2 text-[1.25rem] font-semibold tracking-[-0.04em] text-white">{item.title}</h3>
+    <p className="mt-2 text-sm leading-6 text-white/58">{item.subtitle}</p>
+    <div className="mt-4 flex items-center justify-between rounded-[1rem] bg-black/18 px-3 py-2.5 text-sm text-white/56 transition-colors group-hover:bg-black/24">
+      <span>Open this mix</span>
+      <ArrowRight className="h-4 w-4 text-white/38" />
+    </div>
+  </button>
+);
+
+const DesktopSectionHeading = ({ eyebrow, title, description, action }) => (
+  <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">{eyebrow}</p>
+      <h2 className="mt-1 text-[1.7rem] font-semibold tracking-[-0.045em] text-white">{title}</h2>
+      {description ? <p className="mt-2 text-sm leading-6 text-white/56">{description}</p> : null}
+    </div>
+    {action ? (
+      <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/46">
+        {action}
+      </span>
+    ) : null}
+  </div>
+);
+
+const DesktopHeroMetric = ({ icon: Icon, value, label, note }) => (
+  <div className="rounded-[1.25rem] border border-white/8 bg-black/18 p-4">
+    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/6">
+      <Icon className="h-4.5 w-4.5 text-spotify-green" />
+    </div>
+    <p className="text-[1.55rem] font-semibold tracking-[-0.05em] text-white">{value}</p>
+    <p className="mt-1 text-sm font-medium text-white/78">{label}</p>
+    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/34">{note}</p>
+  </div>
+);
+
+const DesktopSpotlightCard = ({ item, onSelect }) => (
+  <button
+    type="button"
+    onClick={() => onSelect?.(item)}
+    className="relative overflow-hidden rounded-[1.9rem] border border-white/8 bg-[linear-gradient(145deg,rgba(11,20,16,0.96),rgba(22,37,28,0.9)_58%,rgba(10,10,10,0.94)_100%)] p-5 text-left transition-all hover:-translate-y-0.5 hover:border-white/14 hover:shadow-[0_24px_60px_rgba(0,0,0,0.28)]"
+  >
+    <div className="absolute -right-8 top-6 h-32 w-32 rounded-full bg-spotify-green/15 blur-3xl" />
+    <div className="absolute -left-6 bottom-0 h-28 w-28 rounded-full bg-amber-400/10 blur-3xl" />
+
+    <div className="relative z-10">
+      <div className="flex items-center justify-between gap-3">
+        <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/72">
+          Resume from queue
+        </span>
+        <span className="text-xs uppercase tracking-[0.18em] text-white/34">{formatDuration(item.duration)}</span>
+      </div>
+
+      <div className="mt-5 flex items-center gap-4">
+        <CoverArt art={item.art} title={item.title} className="h-24 w-24 shrink-0 rounded-[1.2rem]" />
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">{item.album}</p>
+          <h3 className="mt-2 text-[1.55rem] font-semibold leading-tight tracking-[-0.05em] text-white">
+            {item.title}
+          </h3>
+          <p className="mt-1 text-sm text-white/58">{item.artist}</p>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {['Soft romance', 'Hindi 90s', 'No skips'].map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/10 bg-black/18 px-3 py-1 text-[11px] font-medium text-white/64"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between rounded-[1.1rem] bg-black/18 px-4 py-3">
+        <p className="max-w-[14rem] text-sm leading-6 text-white/56">
+          Picks up exactly where your evening slowed down.
+        </p>
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-spotify-green text-black">
+          <Play className="h-5 w-5 fill-current" />
+        </div>
+      </div>
+    </div>
+  </button>
+);
+
+const DesktopQueueRow = ({ item, index, onSelect }) => (
+  <button
+    type="button"
+    onClick={() => onSelect?.(item)}
+    className="flex w-full items-center gap-3 rounded-[1.15rem] border border-transparent bg-black/18 px-3 py-3 text-left transition-all hover:border-white/8 hover:bg-white/[0.04]"
+  >
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/6 text-sm font-semibold text-white/46">
+      {String(index + 1).padStart(2, '0')}
+    </div>
+    <CoverArt art={item.art} title={item.title} className="h-12 w-12 shrink-0 rounded-[0.95rem]" />
+    <div className="min-w-0 flex-1">
+      <p className="truncate font-medium text-white">{item.title}</p>
+      <p className="truncate text-sm text-white/46">{item.artist}</p>
+    </div>
+    <span className="text-xs font-medium text-white/34">{formatDuration(item.duration)}</span>
+  </button>
+);
+
 const Home = () => {
   const { playTrack } = usePlayer();
+  const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState('All');
 
   const mobileStations = activeFilter === 'Podcasts' ? popularStations : recommendedStations;
+  const desktopName = user?.fullName || user?.username || 'Music Lover';
+  const desktopTasteTags = [
+    user?.favoriteGenre || 'Hindi 90s',
+    user?.favoriteArtist || 'Kumar Sanu',
+    'Soft romance',
+    'Radio first',
+  ];
+  const desktopHeroStats = [
+    { icon: Disc3, value: '247', label: 'liked tracks', note: 'always ready' },
+    { icon: Radio, value: String(desktopPopular.length).padStart(2, '0'), label: 'radio stations', note: 'picked tonight' },
+    { icon: Clock3, value: String(recentListening.length).padStart(2, '0'), label: 'recent loops', note: 'jump back fast' },
+  ];
 
   return (
     <>
@@ -208,9 +283,7 @@ const Home = () => {
               type="button"
               onClick={() => setActiveFilter(filter)}
               className={`shrink-0 rounded-full px-7 py-3 text-[1.05rem] font-medium transition-colors ${
-                activeFilter === filter
-                  ? 'bg-[#19e35b] text-black'
-                  : 'bg-[#2b2b2b] text-white/88'
+                activeFilter === filter ? 'bg-[#19e35b] text-black' : 'bg-[#2b2b2b] text-white/88'
               }`}
             >
               {filter}
@@ -221,11 +294,7 @@ const Home = () => {
         <section>
           <div className="grid grid-cols-2 gap-3">
             {mobileQuickTiles.map((item) => (
-              <MobileQuickTile
-                key={item.id}
-                item={item}
-                onSelect={item.track ? playTrack : undefined}
-              />
+              <MobileQuickTile key={item.id} item={item} onSelect={item.track ? playTrack : undefined} />
             ))}
           </div>
         </section>
@@ -267,169 +336,251 @@ const Home = () => {
         </section>
       </div>
 
-      <div className="hidden min-h-screen bg-[radial-gradient(circle_at_top,_rgba(29,185,84,0.16),_transparent_34%),linear-gradient(180deg,_#151515_0%,_#0b0b0b_100%)] pb-40 md:block lg:pb-32">
-        <div className="w-full px-4 py-5 sm:px-6 lg:px-5 xl:px-8 lg:py-8">
-          <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(29,185,84,0.24),rgba(16,16,16,0.94)_48%,rgba(7,7,7,1))] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.32)] sm:p-7 lg:p-8 xl:p-10">
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-400/20 blur-3xl" />
-            <div className="absolute -bottom-10 left-10 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="hidden min-h-screen bg-[linear-gradient(180deg,rgba(29,185,84,0.18),rgba(18,18,18,0.08)_18%,transparent_42%),linear-gradient(180deg,#141414_0%,#0b0b0b_100%)] pb-40 md:block lg:pb-32">
+        <div className="mx-auto w-full max-w-[94rem] px-5 py-6 md:px-6 xl:px-8">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_21rem] xl:grid-cols-[minmax(0,1fr)_22rem]">
+            <div className="space-y-6">
+              <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(145deg,rgba(17,33,24,0.96),rgba(20,24,22,0.92)_52%,rgba(9,9,9,0.96)_100%)] p-5 md:p-6 xl:p-7">
+                <div className="absolute -left-12 top-8 h-44 w-44 rounded-full bg-spotify-green/10 blur-3xl" />
+                <div className="absolute right-4 top-6 h-36 w-36 rounded-full bg-emerald-300/10 blur-3xl" />
 
-            <div className="relative z-10 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_20rem] xl:grid-cols-[minmax(0,1.3fr)_24rem] lg:items-end">
-              <div className="max-w-2xl">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
-                  <Sparkles className="h-3.5 w-3.5 text-spotify-green" />
-                  Built For Your Loop
-                </div>
-
-                <h1 className="max-w-xl text-3xl font-semibold leading-none tracking-[-0.04em] text-white sm:text-5xl">
-                  Home that actually feels good on tablet and desktop.
-                </h1>
-
-                <p className="mt-4 max-w-lg text-sm leading-6 text-white/72 sm:text-base">
-                  Bigger hero, stronger discovery rows, and cleaner browsing when you have more space.
-                </p>
-
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <button className="inline-flex items-center justify-center gap-2 rounded-full bg-spotify-green px-5 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
-                    <Play className="ml-0.5 h-4 w-4 fill-current" />
-                    Play Your Mix
-                  </button>
-                  <button className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white/88">
-                    Explore Fresh Picks
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <div className="mt-7 grid grid-cols-3 gap-2 sm:max-w-md sm:gap-3">
-                  {[
-                    { label: 'Saved', value: '184' },
-                    { label: 'New Today', value: '12' },
-                    { label: 'Minutes', value: '86' },
-                  ].map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-2xl border border-white/8 bg-black/20 px-3 py-3"
-                    >
-                      <div className="text-xl font-semibold text-white sm:text-2xl">{item.value}</div>
-                      <div className="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/55">
-                        {item.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                {spotlightCards.map((item) => (
-                  <motion.article
-                    key={item.id}
-                    whileHover={{ y: -4 }}
-                    className={`relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-gradient-to-br ${item.tone} p-4`}
-                  >
-                    <img
-                      src={item.cover}
-                      alt={item.title}
-                      className="absolute inset-y-0 right-0 h-full w-1/2 object-cover opacity-30"
-                    />
-                    <div className="relative z-10 max-w-[68%] sm:max-w-[60%]">
-                      <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
-                        <Clock3 className="h-3 w-3" />
-                        Curated
-                      </div>
-                      <h2 className="text-lg font-semibold text-white">{item.title}</h2>
-                      <p className="mt-2 text-xs leading-5 text-white/70 sm:text-sm">{item.subtitle}</p>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="mt-6 grid gap-3 min-[420px]:grid-cols-2 xl:grid-cols-4">
-            {quickLinks.map((item) => (
-              <motion.button
-                key={item.title}
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className={`rounded-[1.5rem] border border-white/7 bg-gradient-to-br ${item.accent} from-0% to-100% p-[1px] text-left`}
-              >
-                <div className="h-full rounded-[calc(1.5rem-1px)] bg-black/70 px-4 py-4">
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8">
-                    <item.icon className="h-5 w-5 text-white" />
+                <div className="relative z-10">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {desktopHeroChips.map((chip, index) => (
+                      <span
+                        key={chip}
+                        className={`rounded-full px-4 py-2 text-sm font-medium ${
+                          index === 0 ? 'bg-white text-black' : 'bg-white/8 text-white/76'
+                        }`}
+                      >
+                        {chip}
+                      </span>
+                    ))}
                   </div>
-                  <h3 className="text-base font-semibold text-white">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-5 text-white/62">{item.subtitle}</p>
-                </div>
-              </motion.button>
-            ))}
-          </section>
 
-          <section className="mt-9">
-            <div className="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Trending</p>
-                <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Albums moving right now</h2>
-              </div>
-              <button className="hidden text-sm font-semibold text-white/58 lg:block">Show all</button>
+                  <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.08fr)_minmax(19rem,0.92fr)] xl:items-start">
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-spotify-green">
+                        Good Evening
+                      </p>
+                      <h1 className="mt-2 max-w-3xl text-[2.5rem] font-semibold leading-[0.94] tracking-[-0.065em] text-white xl:text-[3.15rem]">
+                        {desktopName}, this home finally feels polished.
+                      </h1>
+                      <p className="mt-4 max-w-2xl text-sm leading-7 text-white/60 md:text-base">
+                        Cleaner hierarchy, tighter spacing, and a calmer large-screen layout built around what you actually replay.
+                      </p>
+
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <button
+                          type="button"
+                          onClick={() => playTrack(playerTracks[0])}
+                          className="inline-flex items-center gap-2 rounded-full bg-spotify-green px-5 py-3 text-sm font-semibold text-black"
+                        >
+                          <Play className="h-4 w-4 fill-current" />
+                          Resume Listening
+                        </button>
+                        <Link
+                          to="/search"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white/88"
+                        >
+                          <Sparkles className="h-4 w-4" />
+                          Explore Fresh Picks
+                        </Link>
+                      </div>
+
+                      <div className="mt-6 grid gap-3 md:grid-cols-3">
+                        {desktopHeroStats.map((item) => (
+                          <DesktopHeroMetric
+                            key={item.label}
+                            icon={item.icon}
+                            value={item.value}
+                            label={item.label}
+                            note={item.note}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <DesktopSpotlightCard item={playerTracks[1]} onSelect={playTrack} />
+                  </div>
+
+                  <div className="mt-6">
+                    <DesktopSectionHeading
+                      eyebrow="Quick Access"
+                      title="Pinned right on top"
+                      description="The rows you open most often, without the old stretched spacing."
+                    />
+
+                    <div className="grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
+                      {desktopQuickTiles.map((item) => (
+                        <DesktopQuickTile
+                          key={item.id}
+                          item={item}
+                          onSelect={item.track ? playTrack : undefined}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
+                <div className="rounded-[1.85rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 md:p-6">
+                  <DesktopSectionHeading
+                    eyebrow="Made For You"
+                    title="Tonight's front row"
+                    description="Two rich mixes for the mood you keep circling back to."
+                    action="Fresh pair"
+                  />
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {desktopForYou.map((item) => (
+                      <DesktopFeatureCard
+                        key={item.id}
+                        item={item}
+                        onSelect={item.track ? playTrack : undefined}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.85rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-5 md:p-6">
+                  <DesktopSectionHeading
+                    eyebrow="Queue Focus"
+                    title="Based on your loop"
+                    description="Fast jump-backs to the tracks still shaping your evening."
+                    action="Recent"
+                  />
+
+                  <div className="space-y-3">
+                    {recentListening.slice(0, 4).map((item, index) => (
+                      <DesktopQueueRow key={item.id} item={item} index={index} onSelect={playTrack} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="grid gap-6 xl:grid-cols-2">
+                <div className="rounded-[1.85rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 md:p-6">
+                  <DesktopSectionHeading
+                    eyebrow="Recommended"
+                    title="Stations and radio"
+                    description="A sharper browse row with enough density to feel native on laptop."
+                    action="Radio"
+                  />
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {desktopPopular.map((item, index) => (
+                      <ShelfCard key={item.id} item={item} index={index} className="min-w-0" />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.85rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 md:p-6">
+                  <DesktopSectionHeading
+                    eyebrow="Jump Back In"
+                    title="Albums and mixes"
+                    description="Poster-style covers, tighter columns, and more natural spacing."
+                    action="Replay"
+                  />
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {[...homeAlbums, ...radioShelf].map((item, index) => (
+                      <ShelfCard key={item.id} item={item} index={index} className="min-w-0" />
+                    ))}
+                  </div>
+                </div>
+              </section>
             </div>
 
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory xl:grid xl:grid-cols-5 xl:overflow-visible">
-              {trendingAlbums.map((album, index) => (
-                <div key={album.id} className="min-w-[160px] snap-start sm:min-w-[190px] lg:min-w-0">
-                  <MusicCard track={album} index={index} />
+            <aside className="space-y-6">
+              <section className="rounded-[1.85rem] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(29,185,84,0.2),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff612d] text-lg font-black text-black">
+                    {(desktopName || 'M').slice(0, 1).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/42">
+                      Listening Profile
+                    </p>
+                    <h2 className="truncate text-[1.2rem] font-semibold tracking-[-0.04em] text-white">
+                      Built around your taste
+                    </h2>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          <section className="mt-10 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
-            <motion.div
-              whileHover={{ y: -4 }}
-              className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-5"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(29,185,84,0.22),transparent_35%)]" />
-              <div className="relative z-10">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Mood Capsule</p>
-                <h2 className="mt-2 max-w-sm text-2xl font-semibold tracking-[-0.03em] text-white">
-                  A cleaner large-screen home means faster choices and less hunting.
-                </h2>
-                <p className="mt-3 max-w-md text-sm leading-6 text-white/66">
-                  Featured rows breathe more on larger screens, while the mobile view stays close to the phone screenshot you shared.
-                </p>
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <div className="rounded-[1.1rem] bg-black/18 px-3 py-3">
+                    <p className="text-[1.45rem] font-semibold tracking-[-0.04em] text-white">24</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/36">playlists</p>
+                  </div>
+                  <div className="rounded-[1.1rem] bg-black/18 px-3 py-3">
+                    <p className="text-[1.45rem] font-semibold tracking-[-0.04em] text-white">247</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/36">liked songs</p>
+                  </div>
+                </div>
 
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {['Deep focus', 'Clean vocals', 'Low-key pop', 'Smooth night'].map((chip) => (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {desktopTasteTags.map((tag) => (
                     <span
-                      key={chip}
-                      className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-xs font-medium text-white/78"
+                      key={tag}
+                      className="rounded-full border border-white/10 bg-black/18 px-3 py-1.5 text-xs font-medium text-white/68"
                     >
-                      {chip}
+                      {tag}
                     </span>
                   ))}
                 </div>
-              </div>
-            </motion.div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {moodMixes.map((track, index) => (
-                <MusicCard key={track.id} track={track} index={index} />
-              ))}
-            </div>
-          </section>
+                <p className="mt-5 text-sm leading-6 text-white/60">
+                  Romantic playback, Hindi 90s radio, and warm soundtrack picks are still dominating your top shelves.
+                </p>
+              </section>
 
-          <section className="mt-10">
-            <div className="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-spotify-green">Recents</p>
-                <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-white">Back in your rotation</h2>
-              </div>
-            </div>
+              <section className="rounded-[1.85rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
+                <div className="flex items-center gap-2">
+                  <Headphones className="h-4 w-4 text-spotify-green" />
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/48">
+                    Recent momentum
+                  </p>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-              {desktopRecents.map((track, index) => (
-                <MusicCard key={track.id} track={track} index={index} />
-              ))}
-            </div>
-          </section>
+                <div className="mt-4 space-y-3">
+                  {recentListening.slice(0, 3).map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => playTrack(item)}
+                      className="flex w-full items-center gap-3 rounded-[1.15rem] bg-black/18 px-3 py-3 text-left transition-colors hover:bg-white/[0.04]"
+                    >
+                      <CoverArt art={item.art} title={item.title} className="h-12 w-12 shrink-0 rounded-[0.95rem]" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium text-white">{item.title}</p>
+                        <p className="truncate text-sm text-white/46">{item.artist}</p>
+                      </div>
+                      <span className="text-xs text-white/34">{formatDuration(item.duration)}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <section className="rounded-[1.85rem] border border-emerald-500/18 bg-[linear-gradient(135deg,rgba(29,185,84,0.18),rgba(255,255,255,0.04))] p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/42">Create Faster</p>
+                <h2 className="mt-2 text-[1.45rem] font-semibold leading-tight tracking-[-0.045em] text-white">
+                  Spin up a new playlist without leaving the flow.
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-white/62">
+                  Start with a mood, blend your favorites, or design a bold poster cover in one place.
+                </p>
+                <Link
+                  to="/create"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-black/75 px-4 py-2.5 text-sm font-semibold text-white"
+                >
+                  Open creator
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </section>
+            </aside>
+          </div>
         </div>
       </div>
     </>

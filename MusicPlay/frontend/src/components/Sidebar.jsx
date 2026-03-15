@@ -55,7 +55,7 @@ const Sidebar = () => {
         <div className="flex-1 overflow-y-auto px-4 py-5 scrollbar-hide">
           <Link
             to="/"
-            className="mb-4 flex items-center gap-3 rounded-[1.8rem] border border-white/8 bg-white/[0.03] px-4 py-3"
+            className="mb-4 flex items-center gap-3 rounded-[1.6rem] border border-white/8 bg-white/[0.03] px-4 py-3"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-spotify-green shadow-[0_12px_30px_rgba(29,227,91,0.24)]">
               <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -68,41 +68,28 @@ const Sidebar = () => {
             </div>
           </Link>
 
-          <section className="rounded-[1.9rem] border border-white/8 bg-[radial-gradient(circle_at_top_left,_rgba(29,185,84,0.18),_transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-4 shadow-[0_20px_45px_rgba(0,0,0,0.24)]">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff612d] text-xl font-black text-black">
+          <section className="rounded-[1.6rem] border border-white/8 bg-[radial-gradient(circle_at_top_left,_rgba(29,185,84,0.18),_transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-3 shadow-[0_20px_45px_rgba(0,0,0,0.24)]">
+            <div className="mb-3 flex items-center gap-3 rounded-[1.2rem] bg-black/18 px-3 py-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ff612d] text-lg font-black text-black">
                 {initial}
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
                   Good Evening
                 </p>
-                <p className="truncate text-lg font-semibold tracking-[-0.03em] text-white">
+                <p className="truncate text-base font-semibold tracking-[-0.03em] text-white">
                   {displayName}
                 </p>
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <div className="rounded-2xl bg-black/22 px-3 py-2.5">
-                <p className="text-lg font-semibold text-white">24</p>
-                <p className="text-[10px] uppercase tracking-[0.24em] text-white/42">Playlists</p>
-              </div>
-              <div className="rounded-2xl bg-black/22 px-3 py-2.5">
-                <p className="text-lg font-semibold text-white">247</p>
-                <p className="text-[10px] uppercase tracking-[0.24em] text-white/42">Liked</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="mt-4 rounded-[1.8rem] border border-white/8 bg-white/[0.03] p-2">
             <nav className="space-y-1.5">
               {menuItems.map((item) => (
                 <NavLink
                   key={item.label}
                   to={item.path}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 rounded-[1.25rem] px-3 py-3 transition-all ${
+                    `group flex items-center gap-3 rounded-[1.2rem] px-3 py-3 transition-all ${
                       isActive
                         ? 'bg-[#242424] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]'
                         : 'text-white/62 hover:bg-white/[0.05] hover:text-white'
@@ -112,7 +99,7 @@ const Sidebar = () => {
                   {({ isActive }) => (
                     <>
                       <div
-                        className={`flex h-11 w-11 items-center justify-center rounded-2xl transition-colors ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl transition-colors ${
                           isActive ? 'bg-white/8 text-white' : 'bg-black/18 text-white/72'
                         }`}
                       >
@@ -129,25 +116,38 @@ const Sidebar = () => {
             </nav>
           </section>
 
-          <section className="mt-4 rounded-[1.8rem] border border-white/8 bg-white/[0.03] p-4">
+          <section className="mt-4 rounded-[1.6rem] border border-white/8 bg-white/[0.03] p-4">
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/38">
                   Library
                 </p>
                 <h2 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-white">
-                  Quick access
+                  Your zone
                 </h2>
               </div>
               <Music2 className="h-5 w-5 text-white/36" />
             </div>
 
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="rounded-2xl bg-black/18 px-3 py-2.5">
+                <p className="text-lg font-semibold text-white">24</p>
+                <p className="text-[10px] uppercase tracking-[0.24em] text-white/42">Playlists</p>
+              </div>
+              <div className="rounded-2xl bg-black/18 px-3 py-2.5">
+                <p className="text-lg font-semibold text-white">247</p>
+                <p className="text-[10px] uppercase tracking-[0.24em] text-white/42">Liked</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-4 rounded-[1.6rem] border border-white/8 bg-white/[0.03] p-4">
+            <nav className="space-y-1.5">
               {libraryActions.map((item) => (
                 <NavLink
                   key={item.label}
                   to={item.path}
-                  className="flex items-center gap-3 rounded-[1.2rem] bg-black/18 px-3 py-3 text-white/86 transition-colors hover:bg-white/[0.05]"
+                  className="flex items-center gap-3 rounded-[1.1rem] bg-black/18 px-3 py-3 text-white/86 transition-colors hover:bg-white/[0.05]"
                 >
                   <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${item.tone}`}>
                     <item.icon className="h-4 w-4 text-white" />
@@ -155,10 +155,10 @@ const Sidebar = () => {
                   <span className="font-medium">{item.label}</span>
                 </NavLink>
               ))}
-            </div>
+            </nav>
           </section>
 
-          <section className="mt-4 rounded-[1.8rem] border border-white/8 bg-white/[0.03] p-4">
+          <section className="mt-4 rounded-[1.6rem] border border-white/8 bg-white/[0.03] p-4">
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/38">
@@ -190,7 +190,7 @@ const Sidebar = () => {
             </div>
           </section>
 
-          <section className="mt-4 rounded-[1.8rem] border border-emerald-500/18 bg-[linear-gradient(135deg,rgba(29,185,84,0.18),rgba(255,255,255,0.03))] p-4">
+          <section className="mt-4 rounded-[1.6rem] border border-emerald-500/18 bg-[linear-gradient(135deg,rgba(29,185,84,0.18),rgba(255,255,255,0.03))] p-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/42">
               Mood Boost
             </p>
